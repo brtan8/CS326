@@ -17,7 +17,7 @@ Managing personal finances is a common challenge for many people. From tracking 
 
 Kendrick Ong
 
-Role: Project Manager - Ensure all parts of the project are being implemented promptly
+Role: Project Manager - Tracking all parts of the project
 
 Issues: 
 
