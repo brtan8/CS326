@@ -17,19 +17,19 @@ Managing personal finances is a common challenge for many people. From tracking 
 
 Kendrick Ong
 
-Role: 
+Role: Project Manager - Ensure all parts of the project are being implemented promptly
 
 Issues: 
 
 Brian Tan
 
-Role: 
+Role: Timekeeper - Make sure work gets done in a timely manner and set up meetings
 
 Issues: 
 
 Nicholas Brojek
 
-Role: 
+Role: Notetaker - Take notes on team progress and meeting info
 
 Issues: 
 
