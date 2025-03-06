@@ -23,7 +23,7 @@ Issues:
 
 Brian Tan
 
-Role: Timekeeper - Make sure work gets done in a timely manner and set up meetings
+Role: Timekeeper - Make sure work gets done in a timely manner per the deadlines
 
 Issues: 
 
@@ -35,6 +35,6 @@ Issues:
 
 Varun Pininty
 
-Role: 
+Role: Meeting Creator - Schedule meeting times that works for all team members
 
 Issues: 
