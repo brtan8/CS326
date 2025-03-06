@@ -16,17 +16,25 @@ Why This Project?
 Managing personal finances is a common challenge for many people. From tracking daily expenses to planning monthly budgets, individuals often struggle to maintain financial discipline. CoinSync provides a simple yet effective solution to help users take control of their finances and hit their goals.
 
 Kendrick Ong
+
 Role: 
+
 Issues: 
 
 Brian Tan
+
 Role: 
+
 Issues: 
 
 Nicholas Brojek
+
 Role: 
+
 Issues: 
 
 Varun Pininty
+
 Role: 
+
 Issues: 
