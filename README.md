@@ -1,5 +1,6 @@
 # CS326
 CoinSync
+
 Group 18
 
 Problem: Many people struggle with personal finance tracking and budgeting.
@@ -25,7 +26,7 @@ Brian Tan
 
 Role: Timekeeper - Make sure work gets done in a timely manner per the deadlines
 
-Issues: 
+Issues: Expenses Data Structure, Milestone #4 Deadline
 
 Nicholas Brojek
 
