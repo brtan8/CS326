@@ -20,7 +20,7 @@ Kendrick Ong
 
 Role: Project Manager - Tracking all parts of the project
 
-Issues: User data structure
+Issues: User data structure, Login Screen
 
 Brian Tan
 
