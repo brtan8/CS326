@@ -1,7 +1,7 @@
 # CS326
 CoinSync
 
-Group 18
+Group 18 
 
 Problem: Many people struggle with personal finance tracking and budgeting.
 
@@ -36,6 +36,6 @@ Issues:
 
 Varun R. Pininty
 
-Role: Meeting Creator - Schedule meeting times that works for all team members
+Role: Meeting Creator - In charge of scheduling and organizing meetings in which group coding, designing, and debugging occurs
 
 Issues: 
