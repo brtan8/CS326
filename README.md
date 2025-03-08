@@ -34,7 +34,7 @@ Role: Notetaker - Take notes on team progress and meeting info
 
 Issues: 
 
-Varun Pininty
+Varun R. Pininty
 
 Role: Meeting Creator - Schedule meeting times that works for all team members
 
