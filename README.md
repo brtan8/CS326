@@ -38,4 +38,4 @@ Varun R. Pininty
 
 Role: Meeting Creator - In charge of scheduling and organizing meetings in which group coding, designing, and debugging occurs
 
-Issues: 
+Issues: Notification & Alerts Data Structures, Expenses Display
