@@ -1,4 +1,4 @@
-# CS326
+# CS 326
 CoinSync
  
 Group 18 - In Person
