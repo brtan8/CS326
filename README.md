@@ -1,5 +1,5 @@
 # CS 326
-CoinSync
+Project Name: CoinSync
  
 Group 18 - In Person
 
