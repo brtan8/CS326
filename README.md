@@ -15,6 +15,7 @@ Export reports as CSV (Used to output monthly data clearly and store easily)
 
 Why This Project? 
 Managing personal finances is a common challenge for many people. From tracking daily expenses to planning monthly budgets, individuals often struggle to maintain financial discipline. CoinSync provides a simple yet effective solution to help users take control of their finances and hit their goals.
+<hr>
 
 Kendrick Ong
 
@@ -22,17 +23,23 @@ Role: Project Manager - Tracking all parts of the project
 
 Issues: User data structure, Login Screen
 
+<hr>
+
 Brian Tan
 
 Role: Timekeeper - Make sure work gets done in a timely manner per the deadlines
 
 Issues: Expenses Data Structure, Milestone #4 Deadline, Expenses Input
 
+<hr>
+
 Nicholas Brojek
 
 Role: Notetaker - Take notes on team progress and meeting info
  
 Issues: Cross Currency Tracking, Recurring Profits/Expenses
+
+<hr>
 
 Varun Pininty
 
