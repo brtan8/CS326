@@ -31,7 +31,7 @@ Issues: Expenses Data Structure, Milestone #4 Deadline, Expenses Input
 Nicholas Brojek
 
 Role: Notetaker - Take notes on team progress and meeting info
-
+ 
 Issues: 
 
 Varun Pininty
