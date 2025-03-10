@@ -1,6 +1,6 @@
 # CS326
 CoinSync
-
+ 
 Group 18 - In Person
 
 Problem: Many people struggle with personal finance tracking and budgeting.
