@@ -32,7 +32,7 @@ Nicholas Brojek
 
 Role: Notetaker - Take notes on team progress and meeting info
  
-Issues: 
+Issues: Cross Currency Tracking, Recurring Profits/Expenses
 
 Varun Pininty
 
