@@ -1,0 +1,26 @@
+#main-header {
+  color: #333;
+  margin-top: 50px;
+}
+
+body {
+  text-align: center;
+  background-color: gray;
+  color: black; 
+  font-family: 'Courier New', Courier, monospace; 
+  padding: 20px;
+}
+
+.outside {
+  display: flex;
+}
+
+.box {
+  flex: 1;
+  border: 2px solid black;
+  margin-right: 20px;
+  height: 500px;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+}
