@@ -1,0 +1,19 @@
+body {
+  text-align: center;
+  background-color: gray;
+  color: black; 
+  font-family: 'Courier New', Courier, monospace; 
+  padding: 20px;
+}
+
+.button:hover {
+  background-color: greenyellow;
+}
+
+.input {
+  background-color: beige;
+}
+
+.input:focus {
+  background-color: greenyellow;
+}
