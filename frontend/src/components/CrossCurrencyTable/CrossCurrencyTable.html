@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Currency Input Table</title>
+  <link rel="stylesheet" href="CrossCurrencyTable.css">
+</head>
+<body>
+
+  <h2 class="center">Currency Input Table</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Currency:</th>
+        <th>Amount:</th>
+        <th>Description:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" placeholder="e.g. USD, BTC, EUR" /></td>
+        <td><input type="number" placeholder="e.g. 1000 or -30000" /></td>
+        <td><input type="text" placeholder="e.g. Bought a car" /></td>
+      </tr>
+      <tr>
+        <td><input type="text" /></td>
+        <td><input type="number" /></td>
+        <td><input type="text" /></td>
+      </tr>
+      <tr>
+        <td><input type="text" /></td>
+        <td><input type="number" /></td>
+        <td><input type="text" /></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="2">Total P/L:</td>
+        <td><input type="text" placeholder="e.g. 52557.86 USD" /></td>
+      </tr>
+    </tfoot>
+  </table>
+
+</body>
+</html>
