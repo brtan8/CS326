@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="ExpensesDisplay.css">
+</head>
+<body>
+    <h2>Expenses Display</h2>
+
+    <label for="time-frame">Select Time Frame:</label>
+    <select id="time-frame" class="dropdown">
+        <option>Monthly</option>
+        <option>Yearly</option>
+    </select>
+
+    <h3>Pie Chart Representation</h3>
+
+    <div class="chart-container">
+        <div class="pie-chart"></div>
+        <div class="pie-chart-legend">
+            <h3>Categories</h3>
+            <ul>
+                <li><span class="category-a"></span>A: Food</li>
+                <li><span class="category-b"></span>B: Entertainment</li>
+                <li><span class="category-c"></span>C: Travel</li>
+                <li><span class="category-d"></span>D: Utilities</li>
+                <li><span class="category-e"></span>E: Investment</li>
+                <li><span class="category-f"></span>F: Clothing</li>
+                <li><span class="category-g"></span>G: Work</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>Detailed Expenses Table</h3>
+    <table>
+        <tr>
+            <th>Expense</th>
+            <th>Price</th>
+            <th>Date</th>
+            <th>Category</th>
+        </tr>
+        <tr>
+            <td>Purchase 1</td>
+            <td>$10.00</td>
+            <td>3/9/25</td>
+            <td>A</td>
+        </tr>
+        <tr>
+            <td>Purchase 2</td>
+            <td>$9.45</td>
+            <td>3/12/25</td>
+            <td>B</td>
+        </tr>
+        <tr>
+            <td>Purchase 3</td>
+            <td>$6.30</td>
+            <td>3/16/25</td>
+            <td>F</td>
+        </tr>
+        <tr>
+            <td>Purchase 4</td>
+            <td>$7.49</td>
+            <td>3/17/25</td>
+            <td>G</td>
+        </tr>
+        <tr>
+            <td>Purchase 5</td>
+            <td>$36.90</td>
+            <td>3/20/25</td>
+            <td>E</td>
+        </tr>
+        <tr>
+            <td>Purchase 6</td>
+            <td>$21.40</td>
+            <td>3/23/25</td>
+            <td>D</td>
+        </tr>
+        <tr>
+            <td>Purchase 7</td>
+            <td>$9.87</td>
+            <td>3/24/25</td>
+            <td>C</td>
+        </tr>
+    </table>
+</body>
+</html>
