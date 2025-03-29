@@ -3,6 +3,8 @@ Project Name: CoinSync
  
 Group 18 - In Person
 
+Slide Deck: https://docs.google.com/presentation/d/1eAoBGhbK5pT6dcvH3NFsFfTsSiDJQYKx4fwrtDG7fYA/edit?slide=id.p#slide=id.p
+
 Problem: Many people struggle with personal finance tracking and budgeting.
 
 Solution: A simple user friendly web-based budget tracker that helps users categorize expenses and monitor savings goals. This will help the user get closer to financial freedom. 
