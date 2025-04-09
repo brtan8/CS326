@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="LoginPage.css">
-
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="LoginPage.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about-us">About Us</a></li>
-                <li><a href="#login">Login</a></li>
+                <li><button id="home">Home</button></li>
+                <li><button id="about-us">About Us</button></li>
+                <li><button id="login">Login</button></li>
             </ul>
         </nav>
     </header>
-
-    <div class="center-container">
-        <div class="login-container">
-            <h2>CoinSync Login</h2>
-            <form>
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-            </form>
+    <div id="views" class ="content">
+        <!-- home -->
+        <div id="home-view" style="display:none" class = 'view'>
+            <h1>Welcome to CoinSync</h1>
+            <h2>Our features include:</h2>
+            <p>Add and categorize profits/expenses</p>
+            <p>Budget planning per month or by paycheck</p>
+            <p>Visual charts for spending analysis in months or years (which categories the most money is spent in)</p>
+            <p>Export reports as CSV (Used to output monthly data clearly and store easily)</p>
         </div>
-    </div>
-</body>
-</html>
 
+        <!-- about us -->
+        <div id="about-view" style="display:none" class = 'view'>
+            <h1>About Us</h1>
+            <p>This website is a project for CS326 at UMass Amherst. We are Team 18! </p>
+            <h1>Why This Project? </h1>
+            <p>Managing personal finances is a common challenge for many people. From tracking daily expenses to planning monthly budgets, individuals often struggle to maintain financial discipline. CoinSync provides a simple yet effective solution to help users take control of their finances and hit their goals.</p>
+        </div>
+
+        <!-- login -->
+        <div id="login-view" style="display:none" class = 'view'>
+            <div class="login-container" class = 'view'>
+                <h2>CoinSync Login</h2>
+                <div>
+                    <div class="input-group">
+                        <label id="error" style="display:none"> error invalid credentials </label>
+                        <label id="correct" style="display:none"> Valid Credentials!!! </label>
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="private" id="password" name="password" required>
+                    </div>
+                    <button id = 'login-btn' type="submit" class="login-btn">Login</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    </div>
 </html>
