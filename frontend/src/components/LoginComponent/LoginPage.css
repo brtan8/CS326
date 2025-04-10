@@ -35,8 +35,10 @@ nav ul li {
     margin: 0 15px;
 }
 
-nav ul li a {
+nav ul li button {
     color: white;
+    background-color: transparent;
+    border: none;
     text-decoration: none;
     font-size: 20px; /* Increase the font size */
     font-weight: bold; /* Optional: Make the font bold */
@@ -46,13 +48,35 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
-.center-container {
-    width: 100%;
-    height: calc(100vh - 100px); /* Adjust the height for the header */
+p {
+    text-align: center;
+    line-height: 20px;  
+}
+
+h2{
+    text-align: center;
+    line-height: 20px; 
+}
+
+h1{
+    text-align: center;
+    line-height: 50px;  
+}
+
+.content{
+    padding-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 20px; /* Add a little space from the header */
+}
+
+.login-view {
+    width: 100%;
+    height: calc(100vh - 100px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
 }
 
 .login-container {
