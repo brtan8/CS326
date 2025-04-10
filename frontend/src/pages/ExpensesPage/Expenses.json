@@ -1,0 +1,32 @@
+{
+    "entry1": {
+        "currency": "USD",
+        "amount": "30.00",
+        "category": "Work",
+        "description": "Mowed Lawn"
+    },
+    "entry2": {
+        "currency": "USD",
+        "amount": "-30.98",
+        "category": "Groceries",
+        "description": "Weekly Food"
+    },
+    "entry3": {
+        "currency": "USD",
+        "amount": "1500.00",
+        "category": "Salary",
+        "description": "BiWeekly Salary"
+    },
+    "entry4": {
+        "currency": "USD",
+        "amount": "-50.00",
+        "category": "Drinks",
+        "description": "4/12/23"
+    },
+    "entry5": {
+        "currency": "USD",
+        "amount": "-6.59",
+        "category": "Groceries",
+        "description": "Water"
+    }
+}

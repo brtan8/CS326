@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="ExpensesPage.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses Page</title>
+</head>
+<body>
+    <script src="ExpensesPage.js"></script>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#Expenses">Expenses</a></li>
+                <li><a href="#Graphs">Displays</a></li>
+                <li><a href="#Logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="center-div">
+        <div class="expenses-div">
+            <h2>Add Expenses Here</h2>
+                <div class="input-group">
+                    <label for="currency">Currency</label>
+                    <input list="currencies" id="currency" name="currency" onkeyup="saveData()" required>
+                    <datalist id="currencies">
+                        <option value="USD">
+                        <option value="Yen">
+                        <option value="Pesos">
+                        <option value="Euros">
+                        <option value="Canadian">
+                    </datalist>
+                </div>
+
+                <div class="input-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" onkeyup="saveData()" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" onkeyup="saveData()" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" name="description" onkeyup="saveData()" required>
+                </div>
+
+                <div class="input-group">
+                    <button onclick="add()" id="addButton" class="expense-button">Add</button>
+                </div>
+        </div>
+    </div>
+
+    <div class="expense-div">
+        <div id="expenseList" class="list-container">
+
+        </div>
+    </div>
+</body>
+</html>
