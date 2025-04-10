@@ -31,7 +31,7 @@ Brian Tan
 
 Role: Timekeeper - Make sure work gets done in a timely manner per the deadlines
 
-Issues: Expenses Data Structure, UserDashboard, Expenses Input
+Issues: Expenses Data Structure, Expenses Input Page
 
 <hr>
 
