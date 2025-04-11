@@ -16,6 +16,21 @@ request.onsuccess = function(event) {
     retrieveAllData();
 };
 
+document.addEventListener("DOMContentLoaded", () => {
+    function nav(id) {
+        document.querySelectorAll(".view").forEach(view =>{
+            view.style.display ='none';
+        });
+    
+        document.getElementById(id).style.display = "block";
+    }
+
+    document.getElementById('expPage').addEventListener("click", ()=> nav("expView"));
+    document.getElementById('disPage').addEventListener("click", ()=> nav("disView"));
+
+    nav("expView");
+});
+
 function saveData() {
     const currency = document.getElementById('currency').value;
     const amount = document.getElementById('amount').value;

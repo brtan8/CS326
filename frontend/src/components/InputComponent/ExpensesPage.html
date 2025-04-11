@@ -10,52 +10,61 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#Expenses">Expenses</a></li>
-                <li><a href="#Graphs">Displays</a></li>
-                <li><a href="#Logout">Logout</a></li>
+                <li><button id="expPage">Expenses</button></li>
+                <li><button id="disPage">Displays</button></li>
+                <li><button id="logPage">Logout</button></li>
             </ul>
         </nav>
     </header>
 
-    <div class="center-div">
-        <div class="expenses-div">
-            <h2>Add Expenses Here</h2>
-                <div class="input-group">
-                    <label for="currency">Currency</label>
-                    <input list="currencies" id="currency" name="currency" onkeyup="saveData()" required>
-                    <datalist id="currencies">
-                        <option value="USD">
-                        <option value="Yen">
-                        <option value="Pesos">
-                        <option value="Euros">
-                        <option value="Canadian">
-                    </datalist>
-                </div>
+    <div id="views" class ="content">
+        <!-- Expense Page -->
+        <div id="expView" class = "view"> 
+            <div class="center-div">
+            <div class="expenses-div">
+                <h2>Add Expenses Here</h2>
+                    <div class="input-group">
+                        <label for="currency">Currency</label>
+                        <input list="currencies" id="currency" name="currency" onkeyup="saveData()" required>
+                        <datalist id="currencies">
+                            <option value="USD">
+                            <option value="Yen">
+                            <option value="Pesos">
+                            <option value="Euros">
+                            <option value="Canadian">
+                        </datalist>
+                    </div>
 
-                <div class="input-group">
-                    <label for="amount">Amount</label>
-                    <input type="number" id="amount" name="amount" onkeyup="saveData()" required>
-                </div>
+                    <div class="input-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" name="amount" onkeyup="saveData()" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="category">Category</label>
-                    <input type="text" id="category" name="category" onkeyup="saveData()" required>
-                </div>
+                    <div class="input-group">
+                        <label for="category">Category</label>
+                        <input type="text" id="category" name="category" onkeyup="saveData()" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="description">Description</label>
-                    <input type="text" id="description" name="description" onkeyup="saveData()" required>
-                </div>
+                    <div class="input-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" onkeyup="saveData()" required>
+                    </div>
 
-                <div class="input-group">
-                    <button onclick="add()" id="addButton" class="expense-button">Add</button>
+                    <div class="input-group">
+                        <button onclick="add()" id="addButton" class="expense-button">Add</button>
+                    </div>
+            </div>
+            </div>
+
+            <div class="expense-div">
+                <div id="expenseList" class="list-container">
+
                 </div>
+            </div>
         </div>
-    </div>
-
-    <div class="expense-div">
-        <div id="expenseList" class="list-container">
-
+        <!-- Display Page -->
+        <div id="disView" class = "view">
+         <h1>This is the Display Page</h1>
         </div>
     </div>
 </body>
