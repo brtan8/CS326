@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Dashboard</title>
+    <link rel="stylesheet" href="Graphs.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#Expenses">Expenses</a></li>
+                <li><a href="#Graphs">Displays</a></li>
+                <li><a href="#Logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="controls">
+        <select id="chartType">
+            <option value="pie">Pie Chart</option>
+            <option value="bar">Bar Chart</option>
+            <option value="line">Line Chart</option>
+        </select>
+
+        <div class="time-buttons">
+            <button data-days="5">5 Day</button>
+            <button data-days="10">10 Days</button>
+            <button data-days="30">30 Days</button>
+        </div>
+    </div>
+
+    <canvas id="chartCanvas"></canvas>
+
+    <script src="GraphData.js"></script>
+</body>
+</html>
