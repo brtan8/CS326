@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Page</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <main class="container">
+        <h1>CoinSync Options Menu</h1>
+
+        <section>
+            <label for="currency-select">Default Currency:</label>
+            <select id="currency-select"></select>
+        </section>
+
+        <section class="toggle-row">
+            <label for="dark-toggle">Dark mode:</label>
+            <input type="checkbox" id="dark-toggle">
+        </section>
+
+        <p id="status" role="status"></p>
+        <section id="custom-currency">
+            <h2>Add your custom currency:</h2>
+          
+            <label>
+              Code:
+              <input id="custom-currency-code" placeholder="Ex: BNB">
+            </label>
+          
+            <label>
+              Name:
+              <input id="custom-currency-name" placeholder="Binance Coin">
+            </label>
+          
+            <button id="add-currency-button">Add</button>
+          </section>
+          
+    </main>
+
+    <script src="options.js"></script>
+</body>
+</html>
