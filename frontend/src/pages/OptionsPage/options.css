@@ -1,0 +1,45 @@
+:root {
+    --background: white;
+    --textColor: black;
+  }
+  
+  [data-theme="dark"] {
+    --background: black;
+    --textColor: white;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--textColor);
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  select,
+  input[type="checkbox"] {
+    margin-left: 5px;
+  }
+  
+  .toggle-row {
+    margin-top: 20px;
+  }
+  
+  #status {
+    margin-top: 20px;
+    font-size: 15px;
+  }
+
+#custom-currency { margin-top: 50px; }
+#custom-currency input { width: 100px; }
+
+  
