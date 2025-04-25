@@ -15,6 +15,7 @@
                 <li><button id="home">Home</button></li>
                 <li><button id="about-us">About Us</button></li>
                 <li><button id="login">Login</button></li>
+                <li><button id="create-acc">Create Account</button></li>
             </ul>
         </nav>
     </header>
@@ -56,6 +57,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- create account -->
+        <div id="create-acc-view" style="display:none" class='view'>
+            <div class="create-acc-container">
+              <h2>Create an Account</h2>
+              <div>
+                <div class="input-group">
+                  <label id="create-error" style="display:none; color:red;">Account already exists or failed</label>
+                  <label id="created" style="display:none; color:green;">Account created successfully!</label>
+                  <label for="new-username">Email</label>
+                  <input type="text" id="new-username" name="new-username" required>
+                </div>
+                <div class="input-group">
+                  <label for="new-password">Password</label>
+                  <input type="password" id="new-password" name="new-password" required>
+                </div>
+                <button id="create-btn" class="login-btn">Create Account</button>
+              </div>
+            </div>
+          </div>
     </body>
     </div>
 </html>

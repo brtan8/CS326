@@ -1,6 +1,0 @@
-[
-    { "id": 1, "email": "test@test.com", "password": "pass" },
-    { "id": 2, "email": "Bob@email.com", "password":"password" },
-    { "id": 3, "email": "Alice@email.com", "password":"test12345" }
-]
-  
