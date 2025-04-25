@@ -3,7 +3,7 @@ Project Name: CoinSync
  
 Group 18 - In Person
 
-Slide Deck: [https://docs.google.com/presentation/d/1eAoBGhbK5pT6dcvH3NFsFfTsSiDJQYKx4fwrtDG7fYA/edit?slide=id.p#slide=id.p](https://docs.google.com/presentation/d/1ZxwGNkvjzfV6HRK6p0esERw98gNAfIDlzNV_hjgiDZs/edit?slide=id.g34a77dccbd6_0_5#slide=id.g34a77dccbd6_0_5)
+Slide Deck: https://docs.google.com/presentation/d/1kSLjGsat7D_AbvXm-tm75M1N-o3YgJtPvATzn0lYNKY/edit?slide=id.g34a77dccbd6_0_5#slide=id.g34a77dccbd6_0_5
 
 Problem: Many people struggle with personal finance tracking and budgeting.
 
@@ -31,7 +31,7 @@ Brian Tan
 
 Role: Timekeeper - Make sure work gets done in a timely manner per the deadlines
 
-Issues: Expenses Data Structure, Expenses Input Page
+Issues: Expenses Data Structure, Fetch Expense Page Issue, Add/Remove from Database in Expenses Issue
 
 <hr>
 
