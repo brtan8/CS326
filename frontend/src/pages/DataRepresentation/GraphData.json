@@ -95,7 +95,7 @@
       "amount": "17.00",
       "category": "Entertainment",
       "time": "3/26/2025",
-      "description": ""
+      "description": "Transport"
     },
     "entry15": {
       "currency": "USD",
@@ -117,5 +117,40 @@
       "category": "Food",
       "time": "3/23/2025",
       "description": "Water"
+    },
+    "entry18": {
+      "currency": "USD",
+      "amount": "30.00",
+      "category": "Work",
+      "time": "4/21/2025",
+      "description": "Mowed Lawn"
+    },
+    "entry19": {
+      "currency": "USD",
+      "amount": "30.00",
+      "category": "Work",
+      "time": "4/24/2025",
+      "description": "Stuff"
+    },
+    "entry20": {
+      "currency": "USD",
+      "amount": "24.00",
+      "category": "Entertainment",
+      "time": "4/19/2025",
+      "description": "Mowed Lawn"
+    }, 
+    "entry21": {
+      "currency": "USD",
+      "amount": "15.00",
+      "category": "Transport",
+      "time": "4/18/2025",
+      "description": "Train"
+    }, 
+    "entry22": {
+      "currency": "USD",
+      "amount": "12.00",
+      "category": "Transport",
+      "time": "4/23/2025",
+      "description": "Uber"
     }
 }
