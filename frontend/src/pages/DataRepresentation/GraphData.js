@@ -63,8 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function parseDate(dateString) {
+        //const parts = dateString.split('/');
+        //return new Date(parts[2], parts[0] - 1, parts[1]);
+        //const [month, day, year] = dateString.split('/');
+        //return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
         const parts = dateString.split('/');
-        return new Date(parts[2], parts[0] - 1, parts[1]);
+        const month = parseInt(parts[0], 10) - 1; // Month is 0-indexed
+        const day = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+        return new Date(year, month, day);
     }
 
     function filterDataByDays(days, data) {
