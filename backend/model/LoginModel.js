@@ -19,12 +19,18 @@ class _InMemoryLoginModel {
       return this.Logins;
     }
 
-    async delete(id) {
-      if (id && id.id) {
-        delete this.Logins[id.id];
-      } else {
-        this.Logins = {};  // Clear everything
-        _InMemoryLoginModel.LoginId = 1; // Reset ID counter
+    async delete(identifier) {
+      if (typeof identifier === 'string') {
+        // Delete by email
+        const keyToDelete = Object.keys(this.Logins).find(
+          key => this.Logins[key].email === identifier
+        );
+        if (keyToDelete !== undefined) {
+          delete this.Logins[keyToDelete];
+        }
+      } else if (identifier && identifier.id !== undefined) {
+        // Delete by ID
+        delete this.Logins[identifier.id];
       }
     }
   }
