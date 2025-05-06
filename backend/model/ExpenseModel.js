@@ -7,12 +7,8 @@ const sequelize = new Sequelize({
 
 const Expense = sequelize.define("Expense", {
   userId: {
-    type: DataTypes.UUID,
-  },
-  id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
-    autoIncrement: true
   },
   currency: {
     type: DataTypes.STRING,
@@ -70,7 +66,8 @@ class _SQLiteExpenseModel {
   }
 
   async delete(expense) {
-    await Expense.destroy({ where: { id: expense.id } });
+    console.log(expense.userId);
+    await Expense.destroy({ where: { userId: expense.id } });
     return expense;
   }
 }
