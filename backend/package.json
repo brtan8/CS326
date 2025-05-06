@@ -1,14 +1,15 @@
-
 {
     "name": "middleware",
     "version": "1.0.0",
     "type": "module",
     "main": "login_index.js",
     "scripts": {
-      "start": "node login_index.js"
+        "start": "node login_index.js"
     },
     "dependencies": {
-      "cors": "^2.8.5",
-      "express": "^4.18.2"
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "sequelize": "^6.37.7",
+        "sqlite3": "^5.1.7"
     }
-  }
+}

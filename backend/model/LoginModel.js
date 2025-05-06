@@ -31,6 +31,6 @@ class _InMemoryLoginModel {
 
 const InMemoryLoginModel = new _InMemoryLoginModel();
 
-InMemoryLoginModel.create({ email: 'test@example.com', password: 'test12345' });
+InMemoryLoginModel.create({ email: 'test@example.com', password: 'test12345', uid: 1 });
 
 export default InMemoryLoginModel;
