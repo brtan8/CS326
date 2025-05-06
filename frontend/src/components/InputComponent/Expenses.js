@@ -5,11 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".view").forEach(view =>{
             view.style.display ='none';
         });
-    
+        console.log("we out here");
+        console.log((sessionStorage.getItem("userToken")));
         document.getElementById(id).style.display = "block";
     }
     function logout() {
         window.location.href = "../LoginComponent/LoginPage.html";
+        sessionStorage.setItem("userToken", null);
     }
 
     document.getElementById('expPage').addEventListener("click", ()=> nav("expView"));
@@ -62,6 +64,7 @@ function retrieveAllData() {
 
 function add() {
     itemID++;
+    console.log(sessionStorage.getItem("userToken"));
     let amountInput = document.getElementById('amount').value;
     let currencyInput = document.getElementById('currency').value;
     let categoryInput = document.getElementById('category').value;
@@ -136,12 +139,12 @@ function add() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: itemID, currency: currencyInput, amount: a, category: categoryInput, description: descriptionInput })
+            body: JSON.stringify({ userId: sessionStorage.getItem("userToken") + '-' + itemID.toString(), currency: currencyInput, amount: a, category: categoryInput, description: descriptionInput })
         });
 
         delDiv.addEventListener('click', function() {
             itemDiv.remove();
-            fetch('http://localhost:3000/routes/Expenses?id=' + itemDiv.id.toString(), {
+            fetch('http://localhost:3000/routes/Expenses?id=' + sessionStorage.getItem("userToken") + '-' + item.id.toString(), {
                 method: 'DELETE'
             });
         });
@@ -171,64 +174,70 @@ function addData() {
         console.log(data);
         entryCount = data.Expense.length;
         for (let i = 0; i < data.Expense.length; i++) {
-            itemID = data.Expense[i].id;
-            let item = document.createElement('div');
-            item.id = data.Expense[i].id;
+            if (data.Expense[i].userId !== null) {
+                if (sessionStorage.getItem("userToken") === data.Expense[i].userId.split('-')[0]) {
+                    const user = data.Expense[i].userId.split('-')[0];
+                    const Did = data.Expense[i].userId.split('-')[1];
+                    itemID = Did;
+                    let item = document.createElement('div');
+                    item.id = Did;
 
-            let amountDiv = document.createElement('div');
-            let currencyDiv = document.createElement('div');
-            let categoryDiv = document.createElement('div');
-            let descriptionDiv = document.createElement('div');
-            let delDiv = document.createElement('div');
+                    let amountDiv = document.createElement('div');
+                    let currencyDiv = document.createElement('div');
+                    let categoryDiv = document.createElement('div');
+                    let descriptionDiv = document.createElement('div');
+                    let delDiv = document.createElement('div');
 
-            let amountInput = data.Expense[i].amount.toString();
+                    let amountInput = data.Expense[i].amount.toString();
 
-            if (!amountInput.includes('.')) {
-                amountInput = amountInput + '.00';
+                    if (!amountInput.includes('.')) {
+                        amountInput = amountInput + '.00';
+                    }
+
+                    amountDiv.textContent = amountInput;
+                    amountDiv.classList.add('row');
+                    currencyDiv.textContent = data.Expense[i].currency;
+                    currencyDiv.classList.add('row');
+                    categoryDiv.textContent = data.Expense[i].category;
+                    categoryDiv.classList.add('row');
+                    descriptionDiv.textContent = data.Expense[i].description;
+                    descriptionDiv.classList.add('row');
+
+                    if (parseFloat(data.Expense[i].amount) > 0) {
+                        amountDiv.style.backgroundColor = 'lightgreen';
+                        currencyDiv.style.backgroundColor = 'lightgreen';
+                        categoryDiv.style.backgroundColor = 'lightgreen';
+                        descriptionDiv.style.backgroundColor = 'lightgreen';
+                    }
+                    else {
+                        amountDiv.style.backgroundColor = '#FF7F7F';
+                        currencyDiv.style.backgroundColor = '#FF7F7F';
+                        categoryDiv.style.backgroundColor = '#FF7F7F';
+                        descriptionDiv.style.backgroundColor = '#FF7F7F';
+                    }
+
+                    delDiv.textContent = 'Delete';
+                    delDiv.classList.add('delButton');
+
+                    item.classList.add('item');   
+
+                    item.appendChild(currencyDiv);
+                    item.appendChild(amountDiv);
+                    item.appendChild(categoryDiv);
+                    item.appendChild(descriptionDiv);
+
+                    delDiv.addEventListener('click', function() {
+                        item.remove();
+                        fetch('http://localhost:3000/routes/Expenses?id=' + sessionStorage.getItem("userToken") + '-' + item.id.toString(), {
+                            method: 'DELETE'
+                        });
+                    });
+
+                    item.appendChild(delDiv);
+
+                    document.getElementById('expenseList').appendChild(item);
+                }
             }
-
-            amountDiv.textContent = amountInput;
-            amountDiv.classList.add('row');
-            currencyDiv.textContent = data.Expense[i].currency;
-            currencyDiv.classList.add('row');
-            categoryDiv.textContent = data.Expense[i].category;
-            categoryDiv.classList.add('row');
-            descriptionDiv.textContent = data.Expense[i].description;
-            descriptionDiv.classList.add('row');
-
-            if (parseFloat(data.Expense[i].amount) > 0) {
-                amountDiv.style.backgroundColor = 'lightgreen';
-                currencyDiv.style.backgroundColor = 'lightgreen';
-                categoryDiv.style.backgroundColor = 'lightgreen';
-                descriptionDiv.style.backgroundColor = 'lightgreen';
-            }
-            else {
-                amountDiv.style.backgroundColor = '#FF7F7F';
-                currencyDiv.style.backgroundColor = '#FF7F7F';
-                categoryDiv.style.backgroundColor = '#FF7F7F';
-                descriptionDiv.style.backgroundColor = '#FF7F7F';
-            }
-
-            delDiv.textContent = 'Delete';
-            delDiv.classList.add('delButton');
-
-            item.classList.add('item');   
-
-            item.appendChild(currencyDiv);
-            item.appendChild(amountDiv);
-            item.appendChild(categoryDiv);
-            item.appendChild(descriptionDiv);
-
-            delDiv.addEventListener('click', function() {
-                item.remove();
-                fetch('http://localhost:3000/routes/Expenses?id=' + item.id.toString(), {
-                    method: 'DELETE'
-                });
-            });
-
-            item.appendChild(delDiv);
-
-            document.getElementById('expenseList').appendChild(item);
         }
     })
     .catch(error => {
