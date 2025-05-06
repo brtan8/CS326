@@ -20,6 +20,7 @@ class LoginRoutes {
     this.router.delete("/Login", async (request, result) => {
       await LoginController.clearLogins(request, result);
     });
+    
   }
 
   getRouter() {

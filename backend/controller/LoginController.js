@@ -31,9 +31,20 @@ class LoginController {
     }
   }
 
-  async clearLogins(request, result) {
-    await this.model.delete(request.query);
-    result.json(await this.model.read());
+  static async clearLogins(req, res) {
+    const { email } = req.query;
+  
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required to delete a user' });
+    }
+  
+    try {
+      await InMemoryLoginModel.delete(email); // Use your fixed async delete
+      return res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return res.status(500).json({ error: 'Failed to delete user' });
+    }
   }
 }
 
