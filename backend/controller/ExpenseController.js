@@ -1,40 +1,42 @@
-
-import ExpenseModel from "../model/ExpenseFactory.js";
+import ModelFactory from "../model/ExpenseFactory.js";
 
 class ExpenseController {
   constructor() {
-    this.model = ExpenseModel.getModel();
+    ModelFactory.getModel().then((model) => {
+      this.model = model;
+    });
   }
 
-  async getAllExpenses(request, result) {
-    const Expenses = await this.model.read();
-    result.json(Expenses);
+  async getAllExpenses(req, res) {
+    const Expense = await this.model.read();
+    res.json({ Expense });
   }
 
-  async addExpense(request, result) {
+  async addExpense(req, res) {
     try {
-      if (!request.body) {
-        return result.status(400).json({ error: "error." });
+      if (!req.body) {
+        return res.status(400).json({ error: "Expense description is required." });
       }
 
-      const expense = await this.model.create(request.body);
+      const Expense = await this.model.create(req.body);
 
-      const file = request.body.file
-        ? `with file: ${request.body.filename}`
+      const file = req.body.file
+        ? `with file: ${req.body.filename}`
         : "without file";
+      console.log(`New Expense: ${Expense.userId} - ${Expense.amount} - ${file}`);
 
-      return result.status(201).json(expense);
+      return res.status(201).json(Expense);
     } catch (error) {
-      console.error("Error adding expense:", error);
-      return result
+      console.error("Error adding Expense:", error);
+      return res
         .status(500)
-        .json({ error: "Failed to add expense. Please try again." });
+        .json({ error: "Failed to add Expense. Please try again." });
     }
   }
 
-  async clearExpenses(request, result) {
-    await this.model.delete(request.query);
-    result.json(await this.model.read());
+  async clearExpenses(req, res) {
+    await this.model.delete(req.query);
+    res.json(await this.model.read());
   }
 }
 

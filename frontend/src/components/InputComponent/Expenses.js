@@ -1,21 +1,5 @@
 let entry = 0;
 
-let db;
-const request = indexedDB.open('db', 1);
-
-request.onupgradeneeded = function(event) {
-    db = event.target.result;
-    if (!db.objectStoreNames.contains('inputs')) {
-        db.createObjectStore('inputs', { keyPath: 'id' });
-    }
-};
-
-request.onsuccess = function(event) {
-    db = event.target.result;
-    console.log('Database opened successfully');
-    retrieveAllData();
-};
-
 document.addEventListener("DOMContentLoaded", () => {
     function nav(id) {
         document.querySelectorAll(".view").forEach(view =>{
@@ -30,28 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nav("expView");
 });
-
-function saveData() {
-    const currency = document.getElementById('currency').value;
-    const amount = document.getElementById('amount').value;
-    const category = document.getElementById('category').value;
-    const description = document.getElementById('description').value;
-
-    if (currency || amount || category || description) {
-        const inputData = {
-            id: 1,
-            currency: currency,
-            amount: amount,
-            category: category,
-            description: description
-        };
-
-        const transaction = db.transaction(['inputs'], 'readwrite');
-        const store = transaction.objectStore('inputs');
-        
-        store.put(inputData);
-    }
-}
 
 let itemID = 0;
 
@@ -110,11 +72,30 @@ function add() {
         let descriptionDiv = document.createElement('div');
         let delDiv = document.createElement('div');
 
-        if (!amountInput.includes('.')) {
-            amountInput = amountInput + '.00';
+        let a = parseFloat(amountInput);
+
+        if (currencyInput === 'Yen') {
+            currencyInput = 'USD';
+            a = Math.round(a * .0069 * 100) / 100;
+        }
+        else if (currencyInput === 'Canadian') {
+            currencyInput = 'USD';
+            a = Math.round(a * .72 * 100) / 100;
+        } 
+        else if (currencyInput === 'Pesos') {
+            currencyInput = 'USD';
+            a = Math.round(a * .051 * 100) / 100;
+        }
+        else if (currencyInput === 'Euros') {
+            currencyInput = 'USD';
+            a = Math.round(a * 1.13 * 100) / 100;
+        }
+
+        if (!a.toString().includes('.')) {
+            a = a + '.00';
         }
         
-        amountDiv.textContent = amountInput;
+        amountDiv.textContent = a;
         amountDiv.classList.add('row');
         currencyDiv.textContent = currencyInput;
         currencyDiv.classList.add('row');
@@ -151,12 +132,11 @@ function add() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ currency: currencyInput, amount: amountInput, category: categoryInput, description: descriptionInput })
+            body: JSON.stringify({ id: itemID, currency: currencyInput, amount: a, category: categoryInput, description: descriptionInput })
         });
 
         delDiv.addEventListener('click', function() {
             itemDiv.remove();
-            console.log(itemID);
             fetch('http://localhost:3000/routes/Expenses?id=' + itemDiv.id.toString(), {
                 method: 'DELETE'
             });
@@ -184,11 +164,12 @@ function addData() {
         return response.json();  
     })
     .then(data => {
-        entry = Object.keys(data).length;
-        for (let i = 0; i < Object.keys(data).length; i++) {
-            itemID++;
+        console.log(data);
+        entryCount = data.Expense.length;
+        for (let i = 0; i < data.Expense.length; i++) {
+            itemID = data.Expense[i].id;
             let item = document.createElement('div');
-            item.id = itemID;
+            item.id = data.Expense[i].id;
 
             let amountDiv = document.createElement('div');
             let currencyDiv = document.createElement('div');
@@ -196,16 +177,22 @@ function addData() {
             let descriptionDiv = document.createElement('div');
             let delDiv = document.createElement('div');
 
-            amountDiv.textContent = data[Object.keys(data)[i]].amount;
+            let amountInput = data.Expense[i].amount.toString();
+
+            if (!amountInput.includes('.')) {
+                amountInput = amountInput + '.00';
+            }
+
+            amountDiv.textContent = amountInput;
             amountDiv.classList.add('row');
-            currencyDiv.textContent = data[Object.keys(data)[i]].currency;
+            currencyDiv.textContent = data.Expense[i].currency;
             currencyDiv.classList.add('row');
-            categoryDiv.textContent = data[Object.keys(data)[i]].category;
+            categoryDiv.textContent = data.Expense[i].category;
             categoryDiv.classList.add('row');
-            descriptionDiv.textContent = data[Object.keys(data)[i]].description;
+            descriptionDiv.textContent = data.Expense[i].description;
             descriptionDiv.classList.add('row');
 
-            if (parseFloat(data[Object.keys(data)[i]].amount) > 0) {
+            if (parseFloat(data.Expense[i].amount) > 0) {
                 amountDiv.style.backgroundColor = 'lightgreen';
                 currencyDiv.style.backgroundColor = 'lightgreen';
                 categoryDiv.style.backgroundColor = 'lightgreen';
