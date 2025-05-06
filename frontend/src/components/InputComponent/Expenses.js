@@ -8,9 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
         document.getElementById(id).style.display = "block";
     }
+    function logout() {
+        window.location.href = "../LoginComponent/LoginPage.html";
+    }
 
     document.getElementById('expPage').addEventListener("click", ()=> nav("expView"));
     document.getElementById('disPage').addEventListener("click", ()=> nav("disView"));
+    document.getElementById("logPage").addEventListener("click", ()=> logout());
 
     nav("expView");
 });

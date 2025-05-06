@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('create-acc').addEventListener("click", ()=> nav("create-acc-view"));
 
     document.getElementById('login-btn').addEventListener("click", async ()=> await login());
-    document.getElementById('create-btn').addEventListener("click", async ()=> await createAccount(document.getElementById("new-username").value,document.getElementById("new-password").value));
-
+    document.getElementById('create-btn').addEventListener("click", async ()=> await createAccount(document.getElementById("new-username").value, document.getElementById("new-password").value, Date.now() + Math.floor(Math.random() * 1000)));
+    
 
     nav("home-view");
 });
@@ -24,6 +24,7 @@ async function login(){
     if (valid) {
         document.getElementById("error").style.display ='none';
         document.getElementById("correct").style.display ='block';
+        window.location.href = "../InputComponent/ExpensesPage.html";
     }
     else {
         document.getElementById("error").style.display ='block';
@@ -51,12 +52,12 @@ async function checkUser() {
     }
 }
 
-async function createAccount(email, password) {
+async function createAccount(email, password, uid) {
   try {
     const response = await fetch("http://localhost:3000/routes/Login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, uid})
     });
 
     if (response.ok) {

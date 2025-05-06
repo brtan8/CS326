@@ -1,5 +1,6 @@
 import express from "express";
 import ExpenseRoutes from "../routes/ExpenseRoutes.js";
+import LoginRoutes from "../routes/LoginRoutes.js";
 import cors from 'cors';
 
 class Server {
@@ -21,6 +22,7 @@ class Server {
 
   setupRoutes() {
     this.app.use("/routes", ExpenseRoutes);
+    this.app.use("/routes", LoginRoutes);
   }
 
   start(port = 3000) {
