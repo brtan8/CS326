@@ -20,10 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function login(){
-    const valid = await checkUser()
+    const [valid, uid] = await checkUser();
     if (valid) {
         document.getElementById("error").style.display ='none';
         document.getElementById("correct").style.display ='block';
+        console.log(uid)
+        sessionStorage.setItem("userToken", uid);
         window.location.href = "../InputComponent/ExpensesPage.html";
     }
     else {
@@ -42,13 +44,13 @@ async function checkUser() {
 
         for (const user of values) {
             if (user.email === username && user.password === password) {
-                return true;
+                return [true, user.uid];
             }
         }
-        return false;
+        return [false, 0];
     } catch (error) {
         console.error("Login check error:", error);
-        return false;
+        return [false, 0];
     }
 }
 
