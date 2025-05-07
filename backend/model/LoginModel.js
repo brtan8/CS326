@@ -1,42 +1,68 @@
-class _InMemoryLoginModel {
-    static LoginId = 1;
+import { Sequelize, DataTypes } from "sequelize";
 
-    constructor() {
-      this.Logins = {};
-    }
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: "database.sqlite",
+});
 
-    async create(Login) {
-      this.Logins[_InMemoryLoginModel.LoginId] = Login;
-      _InMemoryLoginModel.LoginId++;
-      return Login;
-    }
+const User = sequelize.define("Users", {
+  uid: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  
+});
 
-    async read(id = null) {
-      if (id) {
-        return Object.values(this.Logins).find((Login) => Login.id === id);
-      }
+class _SQLiteUserModel {
+  constructor() {}
 
-      return this.Logins;
-    }
+  async init(fresh = false) {
+    await sequelize.authenticate();
+    await sequelize.sync({ force: true });
 
-    async delete(identifier) {
-      if (typeof identifier === 'string') {
-        // Delete by email
-        const keyToDelete = Object.keys(this.Logins).find(
-          key => this.Logins[key].email === identifier
-        );
-        if (keyToDelete !== undefined) {
-          delete this.Logins[keyToDelete];
-        }
-      } else if (identifier && identifier.id !== undefined) {
-        // Delete by ID
-        delete this.Logins[identifier.id];
-      }
+    if (fresh) {
+      //await this.delete();
+
+      await this.create({
+        uid: "1",
+        username: "test",
+        password: "pass",
+      });
+
+      await this.create({
+        uid: "2",
+        username: "a",
+        password: "b",
+      });
     }
   }
 
-const InMemoryLoginModel = new _InMemoryLoginModel();
+  async create(user) {
+    return await User.create(user);
+  }
 
-InMemoryLoginModel.create({ email: 'test@example.com', password: 'test12345', uid: 1 });
+  async read(id = null) {
+    if (id) {
+      return await User.findByPk(id);
+    }
+    return await User.findAll();
+  }
 
-export default InMemoryLoginModel;
+  async delete(user) {
+    console.log(user.userId);
+    await User.destroy({ where: { userId: user.id } });
+    return user;
+  }
+}
+
+const SQLiteUserModel = new _SQLiteUserModel();
+
+export default SQLiteUserModel;
