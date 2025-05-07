@@ -14,13 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('login-btn').addEventListener("click", async ()=> await login());
     document.getElementById('create-btn').addEventListener("click", async ()=> await createAccount(document.getElementById("new-username").value, document.getElementById("new-password").value, Date.now() + Math.floor(Math.random() * 1000)));
-    
-
     nav("home-view");
 });
 
 async function login(){
     const [valid, uid] = await checkUser();
+    console.log(uid);
     if (valid) {
         document.getElementById("error").style.display ='none';
         document.getElementById("correct").style.display ='block';
@@ -35,23 +34,25 @@ async function login(){
 }
 
 async function checkUser() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    try {
-        const response = await fetch('http://localhost:3000/routes/Login');
-        const users = await response.json();
-        const values = Object.values(users);
-
-        for (const user of values) {
-            if (user.email === username && user.password === password) {
-                return [true, user.uid];
-            }
-        }
-        return [false, 0];
-    } catch (error) {
-        console.error("Login check error:", error);
-        return [false, 0];
-    }
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  console.log("Checking user:", username, password);  // Debugging line
+  try {
+      const response = await fetch('http://localhost:3000/routes/Login');
+      const data = await response.json();
+      console.log("Users from backend:", data.Login);  // Accessing the Login array
+      
+      for (const user of data.Login) { // Iterating over the Login array
+          console.log("Checking user:", user); // Debugging line
+          if (user.username === username && user.password === password) { // Make sure you're matching with 'username' not 'email'
+              return [true, user.uid];
+          }
+      }
+      return [false, 0];
+  } catch (error) {
+      console.error("Login check error:", error);
+      return [false, 0];
+  }
 }
 
 async function createAccount(email, password, uid) {
@@ -59,7 +60,7 @@ async function createAccount(email, password, uid) {
     const response = await fetch("http://localhost:3000/routes/Login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, uid})
+      body: JSON.stringify({ username: email, password: password, uid: uid })
     });
 
     if (response.ok) {
