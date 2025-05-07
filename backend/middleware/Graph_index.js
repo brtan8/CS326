@@ -1,5 +1,5 @@
 import express from "express";
-import ExpenseRoutes from "../routes/GraphRoutes.js";
+import GraphRoutes from "../routes/GraphRoutes.js";
 import cors from 'cors';
 
 class Server {

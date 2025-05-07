@@ -9,21 +9,25 @@ class GraphRoutes {
 
   initializeRoutes() {
 
-    this.router.get("/Graph", async (request, result) => {
-      await GraphController.getAllExpenses(request, result);
-    });
-
-    this.router.post("/Graph", async (request, result) => {
-      await GraphController.exportChart(request, result);
-    });
-
-    this.router.get("/Graph", async (request, result) => {
-        await GraphController.downloadFile(request, result);
-    });
-
-    //this.router.delete("/Graph", async (request, result) => {
-    //    await GraphController.deleteFile(request, result);
-    //});
+    this.router.get("/Graph/expenses", async (req, res) => {
+        await GraphController.getAllExpenses(req, res);
+      });
+    
+      this.router.post("/Graph/save", async (req, res) => {
+        await GraphController.saveChart(req, res);
+      });
+    
+      this.router.get("/Graph/saved", async (req, res) => {
+        await GraphController.getSavedCharts(req, res);
+      });
+    
+      this.router.delete("/Graph/delete/:filename", async (req, res) => {
+        await GraphController.deleteSavedChart(req, res);
+      });
+    
+      this.router.get("/download/:filename", async (req, res) => {
+        await GraphController.downloadFile(req, res);
+      });
   }
 
   getRouter() {

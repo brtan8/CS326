@@ -3,72 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const chartTypeSelect = document.getElementById('chartType');
     const timeButtons = document.querySelectorAll('.time-buttons button');
     let currentChart;
-
-    let db;
-    const request = indexedDB.open('graphDataDB', 1);
-
-    request.onupgradeneeded = function(event) {
-        db = event.target.result;
-        if (!db.objectStoreNames.contains('graphEntries')) {
-            db.createObjectStore('graphEntries', { keyPath: 'id' });
-        }
-    };
-
-    request.onsuccess = function(event) {
-        db = event.target.result;
-        console.log('GraphData database opened successfully');
-        retrieveAllData();
-    };
-    
-    function retrieveAllData() {
-        const transaction = db.transaction(['graphEntries'], 'readonly');
-        const store = transaction.objectStore('graphEntries');
-
-        const getAllRequest = store.getAll();
-
-        getAllRequest.onsuccess = function(event) {
-            const allData = event.target.result;
-            console.log(allData);
-
-            if (allData[0] === undefined) {
-                fetch('GraphData.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        const transaction = db.transaction(['graphEntries'], 'readwrite');
-                        const store = transaction.objectStore('graphEntries');
-                        Object.entries(data).forEach(([key, value]) => {
-                            store.put({ id: key, ...value });
-                        });
-                        renderChartFromDB(5); 
-                    })
-                    .catch(error => console.error('Error fetching GraphData.json:', error));
-            } else {
-                renderChartFromDB(5); 
-            }
-        };
-    }
-
-    function renderChartFromDB(days) {
-        const transaction = db.transaction(['graphEntries'], 'readonly');
-        const store = transaction.objectStore('graphEntries');
-        const getAllRequest = store.getAll();
-
-        getAllRequest.onsuccess = function(event) {
-            const data = {};
-            event.target.result.forEach(item => {
-                data[item.id] = item;
-            });
-            renderChart(days, chartTypeSelect.value, data); 
-        };
-    }
+    const savedChartsList = document.getElementById('savedChartsList');
+    const saveChartButton = document.getElementById('saveChartButton');
 
     function parseDate(dateString) {
-        //const parts = dateString.split('/');
-        //return new Date(parts[2], parts[0] - 1, parts[1]);
-        //const [month, day, year] = dateString.split('/');
-        //return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
         const parts = dateString.split('/');
-        const month = parseInt(parts[0], 10) - 1; // Month is 0-indexed
+        const month = parseInt(parts[0], 10) - 1;
         const day = parseInt(parts[1], 10);
         const year = parseInt(parts[2], 10);
         return new Date(year, month, day);
@@ -79,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cutoffDate = new Date(today);
         cutoffDate.setDate(today.getDate() - days);
 
-        return Object.values(data).filter(entry => {
+        return data.filter(entry => {
             const entryDate = parseDate(entry.time);
             return entryDate >= cutoffDate;
         });
@@ -111,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     borderWidth: 1,
                 }]
             };
-        } else if (chartType === 'bar' || chartType === 'line') {
+        } else {
             const dailyTotals = {};
             filteredData.forEach(entry => {
                 const date = entry.time;
@@ -119,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const sortedDates = Object.keys(dailyTotals).sort((a, b) => parseDate(a) - parseDate(b));
-
             return {
                 labels: sortedDates,
                 datasets: [{
@@ -146,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             type: chartType,
             data: chartData,
             options: {
+                responsive: true,
+                maintainAspectRatio: true,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -155,23 +96,87 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function handleTimeButtonClick(days) {
-        renderChartFromDB(days); 
+    function fetchDataAndRenderChart(days, chartType) {
+        fetch('/routes/Graph')
+            .then(response => response.json())
+            .then(data => renderChart(days, chartType, data))
+            .catch(error => console.error('Error:', error));
     }
 
-    function handleChartTypeChange() {
-        const days = parseInt(document.querySelector('.time-buttons button.active')?.dataset.days || 5);
-        renderChartFromDB(days); 
+    function saveChart() {
+        if (!currentChart) return;
+
+        const chartData = currentChart.config.data;
+        const canvas = currentChart.canvas;
+        const options = {
+            width: canvas.width,
+            height: canvas.height
+        };
+
+        fetch('/routes/Graph', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ chartData, options })
+        })
+            .then(response => response.json())
+            .then(() => displaySavedCharts())
+            .catch(error => console.error('Error saving chart:', error));
     }
 
-    timeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            timeButtons.forEach(btn => btn.classList.remove('active'));
+    function displaySavedCharts() {
+        fetch('/routes/Graph')
+            .then(response => response.json())
+            .then(data => {
+                const savedCharts = data.savedCharts || [];
+                savedChartsList.innerHTML = '';
+                savedCharts.forEach((url, i) => {
+                    const filename = url.split('/').pop();
+                    const li = document.createElement('li');
+                    li.innerHTML = `Chart ${i + 1} - <a href="${url}" target="_blank">${filename}</a>`;
+                    const delBtn = document.createElement('button');
+                    delBtn.textContent = 'Delete';
+                    delBtn.classList.add('delete-button');
+                    delBtn.dataset.filename = filename;
+                    li.appendChild(delBtn);
+                    savedChartsList.appendChild(li);
+                });
+            });
+    }
+
+    savedChartsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-button')) {
+            const filename = e.target.dataset.filename;
+            fetch(`/routes/Graph/${filename}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(() => displaySavedCharts())
+                .catch(err => console.error('Delete failed:', err));
+        }
+    });
+
+    timeButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelector('.time-buttons .active')?.classList.remove('active');
             this.classList.add('active');
-            handleTimeButtonClick(parseInt(this.dataset.days));
+            const days = parseInt(this.dataset.days);
+            fetchDataAndRenderChart(days, chartTypeSelect.value);
         });
     });
 
-    chartTypeSelect.addEventListener('change', handleChartTypeChange);
-    timeButtons[0].classList.add('active');
+    chartTypeSelect.addEventListener('change', () => {
+        const activeBtn = document.querySelector('.time-buttons .active');
+        const days = parseInt(activeBtn?.dataset.days || 5);
+        fetchDataAndRenderChart(days, chartTypeSelect.value);
+    });
+
+    saveChartButton.addEventListener('click', saveChart);
+
+    const defaultDays = 5;
+    const initialButton = document.querySelector(`.time-buttons button[data-days="${defaultDays}"]`);
+    if (initialButton) {
+        initialButton.classList.add('active');
+    }
+    fetchDataAndRenderChart(defaultDays, chartTypeSelect.value);
+    displaySavedCharts();
 });
