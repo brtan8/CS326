@@ -3,7 +3,7 @@ Project Name: CoinSync
  
 Group 18 - In Person
 
-Slide Deck: https://docs.google.com/presentation/d/1kSLjGsat7D_AbvXm-tm75M1N-o3YgJtPvATzn0lYNKY/edit?slide=id.g34a77dccbd6_0_5#slide=id.g34a77dccbd6_0_5
+Slide Deck: [https://docs.google.com/presentation/d/1kSLjGsat7D_AbvXm-tm75M1N-o3YgJtPvATzn0lYNKY/edit?slide=id.g34a77dccbd6_0_5#slide=id.g34a77dccbd6_0_5](https://docs.google.com/presentation/d/1fvEFhamSRAsJHaXXfxjK1N9w0VYQ0_CxsdqAVL-BsgY/edit?slide=id.p#slide=id.p)
 
 Problem: Many people struggle with personal finance tracking and budgeting.
 
