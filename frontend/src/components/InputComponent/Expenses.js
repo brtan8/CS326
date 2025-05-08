@@ -154,7 +154,7 @@ function add() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: sessionStorage.getItem("userToken") + '-' + itemID.toString(), currency: currencyInput, amount: a, category: categoryInput, description: descriptionInput })
+            body: JSON.stringify({ userId: sessionStorage.getItem("userToken") + '-' + itemID.toString(), currency: currencyInput, amount: a, category: categoryInput, description: descriptionInput, date: dateInput })
         });
 
         delDiv.addEventListener('click', function() {
