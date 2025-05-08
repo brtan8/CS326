@@ -1,0 +1,156 @@
+{
+    "entry1": {
+      "currency": "USD",
+      "amount": "30.00",
+      "category": "Work",
+      "time": "4/12/2025",
+      "description": "Mowed Lawn"
+    },
+    "entry2": {
+      "currency": "USD",
+      "amount": "20.00",
+      "category": "Food",
+      "time": "4/10/2025",
+      "description": "Lunch at cafe"
+    },
+    "entry3": {
+      "currency": "USD",
+      "amount": "100.00",
+      "category": "Rent",
+      "time": "4/01/2025",
+      "description": "Room Rent"
+    },
+    "entry4": {
+      "currency": "USD",
+      "amount": "15.00",
+      "category": "Transport",
+      "time": "4/11/2025",
+      "description": "Bus pass"
+    },
+    "entry5": {
+      "currency": "USD",
+      "amount": "60.00",
+      "category": "Groceries",
+      "time": "4/08/2025",
+      "description": "Weekly grocery"
+    },
+    "entry6": {
+      "currency": "USD",
+      "amount": "35.00",
+      "category": "Work",
+      "time": "4/05/2025",
+      "description": "Yard Cleanup"
+    },
+    "entry7": {
+      "currency": "USD",
+      "amount": "22.50",
+      "category": "Food",
+      "time": "4/04/2025",
+      "description": "Dinner takeout"
+    },
+    "entry8": {
+      "currency": "USD",
+      "amount": "18.00",
+      "category": "Transport",
+      "time": "4/06/2025",
+      "description": "Uber ride"
+    },
+    "entry9": {
+      "currency": "USD",
+      "amount": "40.00",
+      "category": "Entertainment",
+      "time": "4/03/2025",
+      "description": "Movie night"
+    },
+    "entry10": {
+      "currency": "USD",
+      "amount": "10.00",
+      "category": "Utilities",
+      "time": "4/02/2025",
+      "description": "Internet bill"
+    },
+    "entry11": {
+      "currency": "USD",
+      "amount": "12.00",
+      "category": "Utilities",
+      "time": "3/22/2025",
+      "description": "Internet bill"
+    },
+    "entry12": {
+      "currency": "USD",
+      "amount": "12.00",
+      "category": "Utilities",
+      "time": "3/22/2025",
+      "description": "Internet bill"
+    },
+    "entry13": {
+      "currency": "USD",
+      "amount": "12.00",
+      "category": "Transport",
+      "time": "3/27/2025",
+      "description": "Internet bill"
+    },
+    "entry14": {
+      "currency": "USD",
+      "amount": "17.00",
+      "category": "Entertainment",
+      "time": "3/26/2025",
+      "description": "Transport"
+    },
+    "entry15": {
+      "currency": "USD",
+      "amount": "14.00",
+      "category": "Work",
+      "time": "3/21/2025",
+      "description": "Pen"
+    },
+    "entry16": {
+      "currency": "USD",
+      "amount": "9.00",
+      "category": "Utilities",
+      "time": "3/24/2025",
+      "description": "Solar"
+    },
+    "entry17": {
+      "currency": "USD",
+      "amount": "2.00",
+      "category": "Food",
+      "time": "3/23/2025",
+      "description": "Water"
+    },
+    "entry18": {
+      "currency": "USD",
+      "amount": "30.00",
+      "category": "Work",
+      "time": "4/21/2025",
+      "description": "Mowed Lawn"
+    },
+    "entry19": {
+      "currency": "USD",
+      "amount": "30.00",
+      "category": "Work",
+      "time": "4/24/2025",
+      "description": "Stuff"
+    },
+    "entry20": {
+      "currency": "USD",
+      "amount": "24.00",
+      "category": "Entertainment",
+      "time": "4/19/2025",
+      "description": "Mowed Lawn"
+    }, 
+    "entry21": {
+      "currency": "USD",
+      "amount": "15.00",
+      "category": "Transport",
+      "time": "4/18/2025",
+      "description": "Train"
+    }, 
+    "entry22": {
+      "currency": "USD",
+      "amount": "12.00",
+      "category": "Transport",
+      "time": "4/23/2025",
+      "description": "Uber"
+    }
+}

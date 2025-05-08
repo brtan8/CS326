@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recurring Profits/Payments</title>
+  <link rel="stylesheet" href="RecurringPayments.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Recurring Profits & Expenses</h2>
+
+    <div class="entry">
+      <label>Description</label>
+      <input type="text" placeholder="e.g. Netflix Subscription" />
+
+      <label>Amount</label>
+      <input type="number" placeholder="e.g. 15.99" />
+      <small style="color: #666; display: block; margin-top: 4px;">
+  Use negative numbers for expenses(-20), positive for profits(+20)
+</small>
+
+      <label>Recurring?</label>
+      <select>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+
+      <label>Frequency</label>
+      <select>
+        <option value="monthly">Monthly</option>
+        <option value="weekly">Weekly</option>
+        <option value="biweekly">Biweekly</option>
+        <option value="yearly">Yearly</option>
+      </select>
+
+      <div class="flex-row">
+        <button class="btn btn-edit">Edit</button>
+        <button class="btn btn-delete">Delete</button>
+      </div>
+    </div>
+
+    <button class="btn btn-add">+ Add New Entry</button>
+  </div>
+</body>
+</html>
