@@ -39,6 +39,10 @@ class _SQLiteExpenseModel {
     await sequelize.authenticate();
     await sequelize.sync({ force: true });
 
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
     if (fresh) {
       //await this.delete();
 
@@ -46,14 +50,16 @@ class _SQLiteExpenseModel {
         currency: 'USD',
         amount: 1,
         category: 'Groceries',
-        description: 'apples'
+        description: 'apples',
+        date: today
       });
 
       await this.create({
         currency: 'USD',
         amount: 2.00,
         category: 'Groceries',
-        description: 'banana'
+        description: 'banana',
+        date: yesterday
       });
     }
   }

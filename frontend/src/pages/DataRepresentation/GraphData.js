@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedImageList = document.getElementById('savedImageList');
     const filterTypeSelect = document.getElementById('filterType'); // Get the filter dropdown
     let currentChart;
+    let allExpenseData = []; // Initialize allExpenseData
 
     const expensesPageButton = document.getElementById('expPage');
     const displaysPageButton = document.getElementById('disPage');
@@ -33,33 +34,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchAllExpenseData() {
         const userId = sessionStorage.getItem("userToken");
+        if (!userId || userId === "null") {
+            console.error("No user token found. Please log in.");
+            return Promise.reject("No user token");
+        }
+
         const apiUrl = `http://localhost:3000/routes/Expenses?userId=${userId}`;
         return fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                allExpenseData = data.Expense;
-                renderChartWithFilteredData(5, chartTypeSelect.value, allExpenseData);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
             })
-            .catch(error => console.error('Error fetching all expense data:', error));
+            .then(data => {
+                console.log("Fetched expense data:", data);
+                if (data && data.Expense) {
+                    allExpenseData = data.Expense;
+                    // Activate the first time button by default
+                    const defaultButton = document.querySelector('.time-buttons button');
+                    if (defaultButton) {
+                        defaultButton.classList.add('active');
+                        const days = parseInt(defaultButton.dataset.days || 5);
+                        renderChartWithFilteredData(days, chartTypeSelect.value, allExpenseData);
+                    } else {
+                        renderChartWithFilteredData(5, chartTypeSelect.value, allExpenseData);
+                    }
+                } else {
+                    console.error("No expense data returned from API");
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching all expense data:', error);
+                // Still render an empty chart
+                renderChartWithFilteredData(5, chartTypeSelect.value, []);
+            });
     }
 
     function filterExpensesByDays(days, expenses) {
+        if (!expenses || expenses.length === 0) {
+            return [];
+        }
+
         const today = new Date();
         const cutoffDate = new Date(today);
         cutoffDate.setDate(today.getDate() - days);
 
         return expenses.filter(expense => {
-            const expenseDate = new Date(expense.date); // Assuming your date is in a format that Date() can parse
+            // Check if date exists and is valid
+            if (!expense.date) {
+                console.log("Expense missing date field:", expense);
+                return false; // Skip expenses without dates
+            }
+            
+            const expenseDate = new Date(expense.date);
+            if (isNaN(expenseDate.getTime())) {
+                console.log("Invalid date format:", expense.date);
+                return false; // Skip expenses with invalid dates
+            }
+            
             return expenseDate >= cutoffDate;
         });
     }
 
-    function processExpenseDataForChart(expenses, chartType, days) {
+    function processExpenseDataForChart(expenses, chartType) {
+        console.log("Processing data for chart:", chartType, "with expenses:", expenses);
+        
+        if (!expenses || expenses.length === 0) {
+            console.log("No expenses to process");
+            // Return empty chart data
+            return {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [],
+                    borderWidth: 1,
+                }]
+            };
+        }
+
         if (chartType === 'pie') {
             const categoryTotals = {};
             expenses.forEach(entry => {
-                categoryTotals[entry.category] = (categoryTotals[entry.category] || 0) + parseFloat(entry.amount);
+                if (!entry.category) {
+                    entry.category = 'Uncategorized';
+                }
+                categoryTotals[entry.category] = (categoryTotals[entry.category] || 0) + parseFloat(entry.amount || 0);
             });
+            
             return {
                 labels: Object.keys(categoryTotals),
                 datasets: [{
@@ -80,10 +142,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (chartType === 'bar' || chartType === 'line') {
             const dailyTotals = {};
             expenses.forEach(entry => {
-                const date = new Date(entry.date).toLocaleDateString();
-                dailyTotals[date] = (dailyTotals[date] || 0) + parseFloat(entry.amount);
+                if (!entry.date) {
+                    return; // Skip entries without dates
+                }
+                
+                const date = new Date(entry.date);
+                if (isNaN(date.getTime())) {
+                    return; // Skip invalid dates
+                }
+                
+                const dateString = date.toLocaleDateString();
+                dailyTotals[dateString] = (dailyTotals[dateString] || 0) + parseFloat(entry.amount || 0);
             });
+            
             const sortedDates = Object.keys(dailyTotals).sort((a, b) => new Date(a) - new Date(b));
+            
             return {
                 labels: sortedDates,
                 datasets: [{
@@ -100,24 +173,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderChart(chartData, chartType) {
+        console.log("Rendering chart with data:", chartData);
+        
         if (currentChart) {
             currentChart.destroy();
         }
+        
+        // Set default options based on chart type
+        let options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                }
+            }
+        };
+        
+        // Add scales for bar and line charts
+        if (chartType === 'bar' || chartType === 'line') {
+            options.scales = {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            };
+        }
+        
         currentChart = new Chart(chartCanvasContext, {
             type: chartType,
             data: chartData,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+            options: options
         });
     }
 
     function renderChartWithFilteredData(days, chartType, expenses) {
+        console.log(`Rendering chart with ${days} days of data, chart type: ${chartType}`);
         const filteredExpenses = filterExpensesByDays(days, expenses);
+        console.log(`Filtered expenses (${filteredExpenses.length}):`, filteredExpenses);
         const chartData = processExpenseDataForChart(filteredExpenses, chartType);
         renderChart(chartData, chartType);
     }
@@ -152,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 console.log('Graph saved:', data);
-                fetchSavedGraphs(filterTypeSelect.value || null);
+                fetchSavedGraphs(filterTypeSelect?.value || null);
             })
             .catch(error => console.error('Error saving graph:', error));
         } else {
@@ -162,21 +265,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchSavedGraphs(filterType = null) {
         const userId = sessionStorage.getItem("userToken");
+        if (!userId || userId === "null") {
+            console.error("No user token found for fetching saved graphs");
+            return;
+        }
+        
         let url = `http://localhost:3000/routes/Graphs?userId=${userId}`;
         if (filterType) {
             url += `&type=${filterType}`;
         }
 
         fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                displaySavedGraphs(data.graphs);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
             })
-            .catch(error => console.error('Error fetching saved graphs:', error));
+            .then(data => {
+                console.log("Fetched saved graphs:", data);
+                if (data && data.graphs) {
+                    displaySavedGraphs(data.graphs);
+                } else {
+                    console.error("No graphs data returned from API");
+                    displaySavedGraphs([]);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching saved graphs:', error);
+                displaySavedGraphs([]);
+            });
     }
 
     function displaySavedGraphs(graphs) {
         savedImageList.innerHTML = '';
+        
+        if (!graphs || graphs.length === 0) {
+            const noGraphsMsg = document.createElement('p');
+            noGraphsMsg.textContent = 'No saved graphs found.';
+            savedImageList.appendChild(noGraphsMsg);
+            return;
+        }
+        
         graphs.forEach(graph => {
             const listItem = document.createElement('li');
             const img = document.createElement('img');
@@ -186,6 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
+            deleteButton.className = 'delete-btn';
             deleteButton.addEventListener('click', () => deleteSavedGraph(graph.id));
 
             listItem.appendChild(img);
@@ -201,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => {
             if (response.ok) {
                 console.log(`Graph with ID ${graphId} deleted.`);
-                fetchSavedGraphs(filterTypeSelect.value || null);
+                fetchSavedGraphs(filterTypeSelect?.value || null);
             } else {
                 console.error('Error deleting graph.');
             }
@@ -209,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error deleting graph:', error));
     }
 
+    // Set up event listeners
     timeButtons.forEach(button => {
         button.addEventListener('click', function() {
             timeButtons.forEach(btn => btn.classList.remove('active'));
@@ -227,8 +359,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Initialize - activate first time button
+    const firstTimeButton = timeButtons[0];
+    if (firstTimeButton) {
+        firstTimeButton.classList.add('active');
+    }
+
     // Initial data fetch
     fetchAllExpenseData();
+    
     // Initial fetch of saved graphs
     fetchSavedGraphs();
 });
