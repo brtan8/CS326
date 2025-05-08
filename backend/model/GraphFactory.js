@@ -1,10 +1,15 @@
-import InMemoryGraphModel from "./GraphModel.js";
+import SQLiteGraphModel from "./GraphModel.js";
 
-class _GraphModelFactory {
-    getModel() {
-    return InMemoryGraphModel;
-    }
+class _ModelFactory {
+  async getModel(model = "sqlite-fresh") {
+    if (model === "sqlite") {
+      return SQLiteGraphModel;
+    } else if (model === "sqlite-fresh") {
+      await SQLiteGraphModel.init(true);
+      return SQLiteGraphModel;
+    } 
+  }
 }
 
-const GraphModelFactory = new _GraphModelFactory();
-export default GraphModelFactory;
+const ModelFactory = new _ModelFactory();
+export default ModelFactory;

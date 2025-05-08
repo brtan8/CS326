@@ -8,22 +8,17 @@ class GraphRoutes {
   }
 
   initializeRoutes() {
-
-    this.router.get("/Graph", async (request, result) => {
-      await GraphController.getAllExpenses(request, result);
+    this.router.post("/Graphs", async (req, res) => {
+      await GraphController.saveGraph(req, res);
     });
 
-    this.router.post("/Graph", async (request, result) => {
-      await GraphController.exportChart(request, result);
+    this.router.get("/Graphs", async (req, res) => {
+      await GraphController.getGraphs(req, res);
     });
 
-    this.router.get("/Graph", async (request, result) => {
-        await GraphController.downloadFile(request, result);
+    this.router.delete("/Graphs", async (req, res) => {
+      await GraphController.deleteGraph(req, res);
     });
-
-    //this.router.delete("/Graph", async (request, result) => {
-    //    await GraphController.deleteFile(request, result);
-    //});
   }
 
   getRouter() {

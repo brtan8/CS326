@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById('expPage').addEventListener("click", ()=> nav("expView"));
-    document.getElementById('disPage').addEventListener("click", ()=> nav("disView"));
+    document.getElementById('disPage').addEventListener("click", ()=> 
+        window.location.href = "../../pages/DataRepresentation/Graphs.html");
     document.getElementById("logPage").addEventListener("click", ()=> logout());
 
     nav("expView");
@@ -59,6 +60,13 @@ function retrieveAllData() {
         else {
             document.getElementById('description').value = allData[0].description;
         }
+
+        if (allData[0].date === undefined) {
+            document.getElementById('date').value = '';
+        }
+        else {
+            document.getElementById('date').value = allData[0].date;
+        }
     };
 }
 
@@ -69,14 +77,16 @@ function add() {
     let currencyInput = document.getElementById('currency').value;
     let categoryInput = document.getElementById('category').value;
     let descriptionInput = document.getElementById('description').value;
+    let dateInput = document.getElementById('date').value;
 
-    if (amountInput.trim() !== "" && currencyInput.trim() !== "" && categoryInput.trim() !== "" && descriptionInput.trim() !== "") {
+    if (amountInput.trim() !== "" && currencyInput.trim() !== "" && categoryInput.trim() !== "" && descriptionInput.trim() !== "" && dateInput.trim() !== "") {
         let itemDiv = document.createElement('div');
         itemDiv.id = itemID;
         let amountDiv = document.createElement('div');
         let currencyDiv = document.createElement('div');
         let categoryDiv = document.createElement('div');
         let descriptionDiv = document.createElement('div');
+        let dateDiv = document.createElement('div');
         let delDiv = document.createElement('div');
 
         let a = parseFloat(amountInput);
@@ -110,18 +120,22 @@ function add() {
         categoryDiv.classList.add('row');
         descriptionDiv.textContent = descriptionInput;
         descriptionDiv.classList.add('row');
+        dateDiv.textContent = dateInput; // Set the date value
+        dateDiv.classList.add('row');
 
         if (parseFloat(amountInput) > 0) {
             amountDiv.style.backgroundColor = 'lightgreen';
             currencyDiv.style.backgroundColor = 'lightgreen';
             categoryDiv.style.backgroundColor = 'lightgreen';
             descriptionDiv.style.backgroundColor = 'lightgreen';
+            dateDiv.style.backgroundColor = 'lightgreen';
         }
         else {
             amountDiv.style.backgroundColor = '#FF7F7F';
             currencyDiv.style.backgroundColor = '#FF7F7F';
             categoryDiv.style.backgroundColor = '#FF7F7F';
             descriptionDiv.style.backgroundColor = '#FF7F7F';
+            dateDiv.style.backgroundColor = '#FF7F7F';
         }
 
         delDiv.textContent = 'Delete';
@@ -133,6 +147,7 @@ function add() {
         itemDiv.appendChild(amountDiv);
         itemDiv.appendChild(categoryDiv);
         itemDiv.appendChild(descriptionDiv);
+        itemDiv.appendChild(dateDiv); // Append the date div
 
         fetch('http://localhost:3000/routes/Expenses', {
             method: 'POST',
@@ -157,6 +172,7 @@ function add() {
         document.getElementById('currency').value = '';
         document.getElementById('category').value = '';
         document.getElementById('description').value = '';
+        document.getElementById('date').value = '';
     } else {
         alert('All fields MUST be filled out!');
     }
@@ -186,6 +202,7 @@ function addData() {
                     let currencyDiv = document.createElement('div');
                     let categoryDiv = document.createElement('div');
                     let descriptionDiv = document.createElement('div');
+                    let dateDiv = document.createElement('div');
                     let delDiv = document.createElement('div');
 
                     let amountInput = data.Expense[i].amount.toString();
@@ -202,18 +219,22 @@ function addData() {
                     categoryDiv.classList.add('row');
                     descriptionDiv.textContent = data.Expense[i].description;
                     descriptionDiv.classList.add('row');
+                    dateDiv.textContent = data.Expense[i].date ? new Date(data.Expense[i].date).toLocaleDateString() : ''; // Format the date for display
+                    dateDiv.classList.add('row');
 
                     if (parseFloat(data.Expense[i].amount) > 0) {
                         amountDiv.style.backgroundColor = 'lightgreen';
                         currencyDiv.style.backgroundColor = 'lightgreen';
                         categoryDiv.style.backgroundColor = 'lightgreen';
                         descriptionDiv.style.backgroundColor = 'lightgreen';
+                        dateDiv.style.backgroundColor = 'lightgreen';
                     }
                     else {
                         amountDiv.style.backgroundColor = '#FF7F7F';
                         currencyDiv.style.backgroundColor = '#FF7F7F';
                         categoryDiv.style.backgroundColor = '#FF7F7F';
                         descriptionDiv.style.backgroundColor = '#FF7F7F';
+                        dateDiv.style.backgroundColor = '#FF7F7F';
                     }
 
                     delDiv.textContent = 'Delete';
@@ -225,6 +246,7 @@ function addData() {
                     item.appendChild(amountDiv);
                     item.appendChild(categoryDiv);
                     item.appendChild(descriptionDiv);
+                    item.appendChild(dateDiv);
 
                     delDiv.addEventListener('click', function() {
                         item.remove();

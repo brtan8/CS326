@@ -86,3 +86,45 @@ nav ul li a {
 nav ul li a:hover {
     text-decoration: underline;
 }
+
+#savedUrls {
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+#savedUrls h2 {
+    margin-bottom: 0.5rem;
+}
+
+#savedImageList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#savedImageList li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+#savedImageList li a {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+#savedImageList li .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+#savedImageList li .delete-btn:hover {
+    background-color: #c82333;
+}
