@@ -1,7 +1,7 @@
 import SQLiteExpenseModel from "./ExpenseModel.js";
 
 class _ModelFactory {
-  async getModel(model = "sqlite-fresh") {
+  async getModel(model = "sqlite") {
     if (model === "sqlite") {
       return SQLiteExpenseModel;
     } else if (model === "sqlite-fresh") {

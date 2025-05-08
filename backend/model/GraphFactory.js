@@ -1,7 +1,7 @@
 import SQLiteGraphModel from "./GraphModel.js";
 
 class _ModelFactory {
-  async getModel(model = "sqlite-fresh") {
+  async getModel(model = "sqlite") {
     if (model === "sqlite") {
       return SQLiteGraphModel;
     } else if (model === "sqlite-fresh") {
