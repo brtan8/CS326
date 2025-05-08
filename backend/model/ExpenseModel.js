@@ -26,6 +26,10 @@ const Expense = sequelize.define("Expense", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  date: { // Add the date field
+    type: DataTypes.DATE,
+    allowNull: true, // Or false if you want to enforce it
+  },
 });
 
 class _SQLiteExpenseModel {

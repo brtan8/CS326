@@ -1,93 +1,51 @@
-import GraphModel from "../model/GraphFactory.js";
- import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
- import fs from 'fs/promises';
- import path from 'path';
+import GraphModel from "../model/GraphModel.js";
 
- const tempDir = path.join(__dirname, '../../temp');
-
- fs.mkdir(tempDir, { recursive: true }).catch(console.error);
-
- // New object to store filenames based on chart and options
- const generatedFiles = {};
-
- class GraphController {
-    constructor() {
-        this.model = GraphModel.getModel();
+class GraphController {
+  async saveGraph(req, res) {
+    try {
+      const { userId, url, type, fileName } = req.body;
+      if (!userId || !url || !type || !fileName) {
+        return res.status(400).json({ error: "User ID, URL, type, and filename are required." });
+      }
+      const savedGraph = await GraphModel.create({ userId, url, type, fileName });
+      return res.status(201).json(savedGraph);
+    } catch (error) {
+      console.error("Error saving graph:", error);
+      return res.status(500).json({ error: "Failed to save graph." });
     }
+  }
 
-    async getAllExpenses(request, result) {
-        try {
-            const expenses = await this.model.read();
-            result.json(expenses);
-        } 
-        catch (error) {
-            console.error("Error getting all expenses:", error);
-            result.status(500).json({ error: "Failed to retrieve expenses" });
-        }
+  async getGraphs(req, res) {
+    try {
+      const { userId, type } = req.query;
+      const whereClause = {};
+      if (userId) {
+        whereClause.userId = userId;
+      }
+      if (type) {
+        whereClause.type = type;
+      }
+      const graphs = await GraphModel.read(whereClause);
+      res.json({ graphs });
+    } catch (error) {
+      console.error("Error getting graphs:", error);
+      return res.status(500).json({ error: "Failed to retrieve graphs." });
     }
+  }
 
-    async exportChart(request, result) {
-        try {
-            const chartData = request.body.chartData;
-            const exportOptions = request.body.options;
-            const width = parseInt(exportOptions.width, 10) || 800;
-            const height = parseInt(exportOptions.height, 10) || 600;
-            const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
-
-            const chartKey = this.generateChartKey(chartData.type, exportOptions);
-
-            const fileName = `chart-${chartKey}.png`;
-            const filePath = path.join(tempDir, fileName);
-
-            const fileBuffer = await chartJSNodeCanvas.renderToBuffer(chartData, 'image/png');
-
-            if (generatedFiles[chartKey]) {
-                try {
-                    await fs.unlink(path.join(tempDir, generatedFiles[chartKey]));
-                } 
-                catch (deleteError) {
-                    console.error('Error deleting old file:', deleteError);
-                }
-            }
-
-            await fs.writeFile(filePath, fileBuffer);
-            generatedFiles[chartKey] = fileName;
-            const downloadUrl = `/download/${fileName}`;
-            result.json({ success: true, downloadUrl });
-
-        } 
-        catch (error) {
-            console.error('Error exporting chart:', error);
-            result.status(500).json({ success: false, error: 'Failed to export chart' });
-        }
+  async deleteGraph(req, res) {
+    try {
+      const { id } = req.query;
+      if (!id) {
+        return res.status(400).json({ error: "Graph ID is required." });
+      }
+      const deleted = await GraphModel.delete({ id });
+      res.json({ message: `Graph with ID ${id} deleted.` });
+    } catch (error) {
+      console.error("Error deleting graph:", error);
+      return res.status(500).json({ error: "Failed to delete graph." });
     }
-
-    async downloadFile(request, result) {
-        const filename = request.params.filename;
-        const filePath = path.join(tempDir, filename);
-        result.download(filePath, (err) => {
-        if (err) {
-            console.error('Error downloading file:', err);
-            result.status(404).send('File not found');
-        }
-        });
-    }
-
-    generateChartKey(chartType, options) {
-        let key = `${chartType}-${options.days || 'all'}`;
-
-        // We only include width and height if you deem them essential for "uniqueness"
-        // If charts of the same type/range are visually the same regardless of size, omit them
-        /*
-        if (options.width) {
-            key += `-${options.width}`;
-        }
-        if (options.height) {
-            key += `-${options.height}`;
-        }
-        */
-        return key;
-    }
+  }
 }
 
- export default new GraphController();
+export default new GraphController();

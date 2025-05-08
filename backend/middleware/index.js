@@ -1,6 +1,7 @@
 import express from "express";
 import ExpenseRoutes from "../routes/ExpenseRoutes.js";
 import LoginRoutes from "../routes/LoginRoutes.js";
+import GraphRoutes from "../routes/GraphRoutes.js"; // Import GraphRoutes
 import cors from 'cors';
 
 class Server {
@@ -23,6 +24,7 @@ class Server {
   setupRoutes() {
     this.app.use("/routes", ExpenseRoutes);
     this.app.use("/routes", LoginRoutes);
+    this.app.use("/routes", GraphRoutes); // Use GraphRoutes
   }
 
   start(port = 3000) {
