@@ -1,103 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chartCanvas = document.getElementById('chartCanvas').getContext('2d');
+    const chartCanvas = document.getElementById('chartCanvas');
+    const chartCanvasContext = chartCanvas.getContext('2d');
     const chartTypeSelect = document.getElementById('chartType');
     const timeButtons = document.querySelectorAll('.time-buttons button');
+    const saveImageBtn = document.getElementById('saveImageBtn');
+    const savedImageList = document.getElementById('savedImageList');
+    const filterTypeSelect = document.getElementById('filterType'); // Get the filter dropdown
     let currentChart;
 
-    let db;
-    const request = indexedDB.open('graphDataDB', 1);
+    const expensesPageButton = document.getElementById('expPage');
+    const displaysPageButton = document.getElementById('disPage');
+    const logoutButton = document.getElementById('logPage');
 
-    request.onupgradeneeded = function(event) {
-        db = event.target.result;
-        if (!db.objectStoreNames.contains('graphEntries')) {
-            db.createObjectStore('graphEntries', { keyPath: 'id' });
-        }
-    };
-
-    request.onsuccess = function(event) {
-        db = event.target.result;
-        console.log('GraphData database opened successfully');
-        retrieveAllData();
-    };
-    
-    function retrieveAllData() {
-        const transaction = db.transaction(['graphEntries'], 'readonly');
-        const store = transaction.objectStore('graphEntries');
-
-        const getAllRequest = store.getAll();
-
-        getAllRequest.onsuccess = function(event) {
-            const allData = event.target.result;
-            console.log(allData);
-
-            if (allData[0] === undefined) {
-                fetch('GraphData.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        const transaction = db.transaction(['graphEntries'], 'readwrite');
-                        const store = transaction.objectStore('graphEntries');
-                        Object.entries(data).forEach(([key, value]) => {
-                            store.put({ id: key, ...value });
-                        });
-                        renderChartFromDB(5); 
-                    })
-                    .catch(error => console.error('Error fetching GraphData.json:', error));
-            } else {
-                renderChartFromDB(5); 
-            }
-        };
+    if (expensesPageButton) {
+        expensesPageButton.addEventListener('click', () => {
+            window.location.href = "../../components/InputComponent/ExpensesPage.html";
+        });
     }
 
-    function renderChartFromDB(days) {
-        const transaction = db.transaction(['graphEntries'], 'readonly');
-        const store = transaction.objectStore('graphEntries');
-        const getAllRequest = store.getAll();
-
-        getAllRequest.onsuccess = function(event) {
-            const data = {};
-            event.target.result.forEach(item => {
-                data[item.id] = item;
-            });
-            renderChart(days, chartTypeSelect.value, data); 
-        };
+    if (displaysPageButton) {
+        displaysPageButton.addEventListener('click', () => {
+            window.location.href = "Graphs.html"; // Staying on the same page
+        });
     }
 
-    function parseDate(dateString) {
-        //const parts = dateString.split('/');
-        //return new Date(parts[2], parts[0] - 1, parts[1]);
-        //const [month, day, year] = dateString.split('/');
-        //return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
-        const parts = dateString.split('/');
-        const month = parseInt(parts[0], 10) - 1; // Month is 0-indexed
-        const day = parseInt(parts[1], 10);
-        const year = parseInt(parts[2], 10);
-        return new Date(year, month, day);
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => { // Add an event listener for the click
+         window.location.href = "../../components/LoginComponent/LoginPage.html"; // Assuming LoginComponent is at the root of frontend
+         sessionStorage.setItem("userToken", null);
+        });
     }
 
-    function filterDataByDays(days, data) {
+    function fetchAllExpenseData() {
+        const userId = sessionStorage.getItem("userToken");
+        const apiUrl = `http://localhost:3000/routes/Expenses?userId=${userId}`;
+        return fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                allExpenseData = data.Expense;
+                renderChartWithFilteredData(5, chartTypeSelect.value, allExpenseData);
+            })
+            .catch(error => console.error('Error fetching all expense data:', error));
+    }
+
+    function filterExpensesByDays(days, expenses) {
         const today = new Date();
         const cutoffDate = new Date(today);
         cutoffDate.setDate(today.getDate() - days);
 
-        return Object.values(data).filter(entry => {
-            const entryDate = parseDate(entry.time);
-            return entryDate >= cutoffDate;
+        return expenses.filter(expense => {
+            const expenseDate = new Date(expense.date); // Assuming your date is in a format that Date() can parse
+            return expenseDate >= cutoffDate;
         });
     }
 
-    function prepareChartData(filteredData, chartType) {
+    function processExpenseDataForChart(expenses, chartType, days) {
         if (chartType === 'pie') {
             const categoryTotals = {};
-            filteredData.forEach(entry => {
+            expenses.forEach(entry => {
                 categoryTotals[entry.category] = (categoryTotals[entry.category] || 0) + parseFloat(entry.amount);
             });
-
             return {
                 labels: Object.keys(categoryTotals),
                 datasets: [{
                     data: Object.values(categoryTotals),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
+                    backgroundColor: ['rgba(255, 99, 132, 0.6)',
                         'rgba(54, 162, 235, 0.6)',
                         'rgba(255, 206, 86, 0.6)',
                         'rgba(75, 192, 192, 0.6)',
@@ -106,20 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         'rgba(0, 128, 0, 0.6)',
                         'rgba(128, 0, 128, 0.6)',
                         'rgba(0,0,255,0.6)',
-                        'rgba(128,128,0,0.6)'
-                    ],
+                        'rgba(128,128,0,0.6)'],
                     borderWidth: 1,
                 }]
             };
         } else if (chartType === 'bar' || chartType === 'line') {
             const dailyTotals = {};
-            filteredData.forEach(entry => {
-                const date = entry.time;
+            expenses.forEach(entry => {
+                const date = new Date(entry.date).toLocaleDateString();
                 dailyTotals[date] = (dailyTotals[date] || 0) + parseFloat(entry.amount);
             });
-
-            const sortedDates = Object.keys(dailyTotals).sort((a, b) => parseDate(a) - parseDate(b));
-
+            const sortedDates = Object.keys(dailyTotals).sort((a, b) => new Date(a) - new Date(b));
             return {
                 labels: sortedDates,
                 datasets: [{
@@ -132,17 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
             };
         }
+        return null;
     }
 
-    function renderChart(days, chartType, data) {
-        const filteredData = filterDataByDays(days, data);
-        const chartData = prepareChartData(filteredData, chartType);
-
+    function renderChart(chartData, chartType) {
         if (currentChart) {
             currentChart.destroy();
         }
-
-        currentChart = new Chart(chartCanvas, {
+        currentChart = new Chart(chartCanvasContext, {
             type: chartType,
             data: chartData,
             options: {
@@ -155,13 +116,97 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function renderChartWithFilteredData(days, chartType, expenses) {
+        const filteredExpenses = filterExpensesByDays(days, expenses);
+        const chartData = processExpenseDataForChart(filteredExpenses, chartType);
+        renderChart(chartData, chartType);
+    }
+
     function handleTimeButtonClick(days) {
-        renderChartFromDB(days); 
+        renderChartWithFilteredData(days, chartTypeSelect.value, allExpenseData);
     }
 
     function handleChartTypeChange() {
         const days = parseInt(document.querySelector('.time-buttons button.active')?.dataset.days || 5);
-        renderChartFromDB(days); 
+        renderChartWithFilteredData(days, chartTypeSelect.value, allExpenseData);
+    }
+
+    function handleSaveImage() {
+        if (currentChart && currentChart.data.datasets.some(dataset => dataset.data.length > 0)) {
+            const chartType = chartTypeSelect.value;
+            const activeDaysButton = document.querySelector('.time-buttons button.active');
+            const days = activeDaysButton ? activeDaysButton.dataset.days : 'all';
+            const fileName = `${chartType}-${days}-days.png`;
+            const dataURL = chartCanvas.toDataURL('image/png');
+            const userId = sessionStorage.getItem("userToken");
+
+            const graphData = { userId, url: dataURL, type: chartType, fileName };
+
+            fetch('http://localhost:3000/routes/Graphs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(graphData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Graph saved:', data);
+                fetchSavedGraphs(filterTypeSelect.value || null);
+            })
+            .catch(error => console.error('Error saving graph:', error));
+        } else {
+            alert('No chart data to save!');
+        }
+    }
+
+    function fetchSavedGraphs(filterType = null) {
+        const userId = sessionStorage.getItem("userToken");
+        let url = `http://localhost:3000/routes/Graphs?userId=${userId}`;
+        if (filterType) {
+            url += `&type=${filterType}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                displaySavedGraphs(data.graphs);
+            })
+            .catch(error => console.error('Error fetching saved graphs:', error));
+    }
+
+    function displaySavedGraphs(graphs) {
+        savedImageList.innerHTML = '';
+        graphs.forEach(graph => {
+            const listItem = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = graph.url;
+            img.alt = graph.fileName;
+            img.style.maxWidth = '200px';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', () => deleteSavedGraph(graph.id));
+
+            listItem.appendChild(img);
+            listItem.appendChild(deleteButton);
+            savedImageList.appendChild(listItem);
+        });
+    }
+
+    function deleteSavedGraph(graphId) {
+        fetch(`http://localhost:3000/routes/Graphs?id=${graphId}`, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Graph with ID ${graphId} deleted.`);
+                fetchSavedGraphs(filterTypeSelect.value || null);
+            } else {
+                console.error('Error deleting graph.');
+            }
+        })
+        .catch(error => console.error('Error deleting graph:', error));
     }
 
     timeButtons.forEach(button => {
@@ -173,5 +218,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     chartTypeSelect.addEventListener('change', handleChartTypeChange);
-    timeButtons[0].classList.add('active');
+    saveImageBtn.addEventListener('click', handleSaveImage);
+
+    if (filterTypeSelect) {
+        filterTypeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            fetchSavedGraphs(selectedType || null);
+        });
+    }
+
+    // Initial data fetch
+    fetchAllExpenseData();
+    // Initial fetch of saved graphs
+    fetchSavedGraphs();
 });
