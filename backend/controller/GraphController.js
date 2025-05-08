@@ -1,13 +1,19 @@
-import GraphModel from "../model/GraphModel.js";
+import ModelFactory from "../model/GraphFactory.js";
 
 class GraphController {
+  constructor() {
+    ModelFactory.getModel().then((model) => {
+      this.model = model;
+    });
+  }
+
   async saveGraph(req, res) {
     try {
       const { userId, url, type, fileName } = req.body;
       if (!userId || !url || !type || !fileName) {
         return res.status(400).json({ error: "User ID, URL, type, and filename are required." });
       }
-      const savedGraph = await GraphModel.create({ userId, url, type, fileName });
+      const savedGraph = await this.model.create({ userId, url, type, fileName });
       return res.status(201).json(savedGraph);
     } catch (error) {
       console.error("Error saving graph:", error);
@@ -25,7 +31,7 @@ class GraphController {
       if (type) {
         whereClause.type = type;
       }
-      const graphs = await GraphModel.read(whereClause);
+      const graphs = await this.model.read(whereClause);
       res.json({ graphs });
     } catch (error) {
       console.error("Error getting graphs:", error);
@@ -39,7 +45,7 @@ class GraphController {
       if (!id) {
         return res.status(400).json({ error: "Graph ID is required." });
       }
-      const deleted = await GraphModel.delete({ id });
+      const deleted = await this.model.delete({ id });
       res.json({ message: `Graph with ID ${id} deleted.` });
     } catch (error) {
       console.error("Error deleting graph:", error);

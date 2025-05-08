@@ -2,7 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "graph_database.sqlite", // Separate database for graphs
+  storage: "database.sqlite", 
 });
 
 const Graph = sequelize.define("Graph", {
@@ -34,9 +34,27 @@ const Graph = sequelize.define("Graph", {
 });
 
 class _SQLiteGraphModel {
-  async init() {
+  async init(fresh = false) {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
+
+    if (fresh) {
+        //await this.delete();
+    
+        await this.create({
+            userId: "1",
+            url: "https://example.com/graph1",
+            type: "line",
+            fileName: "graph1.png",
+        });
+    
+        await this.create({
+            userId: "2",
+            url: "https://example.com/graph2",
+            type: "bar",
+            fileName: "graph2.png",
+        });
+    }
   }
 
   async create(graphData) {
