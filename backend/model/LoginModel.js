@@ -57,9 +57,29 @@ class _SQLiteUserModel {
   }
 
   async delete(user) {
-    console.log(user.userId);
-    await User.destroy({ where: { userId: user.id } });
+    console.log(user.uid);
+    await User.destroy({ where: { uid: user.uid } });
     return user;
+  }
+  async patch(uid, newPassword) {
+    try {
+      const user = await User.findOne({ where: { uid } });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      // Update the password
+      user.password = newPassword;
+
+      // Save the updated user
+      await user.save();
+
+      return user; // Return the updated user
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
   }
 }
 

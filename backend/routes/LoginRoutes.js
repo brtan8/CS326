@@ -18,8 +18,14 @@ class LoginRoutes {
     });
 
     this.router.delete("/Login", async (request, result) => {
-      await LoginController.clearLogins(request, result);
+      await LoginController.deleteLogin(request, result);  // Changed method to `deleteLogin`
     });
+
+    this.router.patch("/Login", async (req, res) => {
+      await LoginController.updatePassword(req, res);
+    });
+
+
     
   }
 

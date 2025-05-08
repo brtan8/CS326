@@ -9,12 +9,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const valid = await verifyOldPassword(username, oldPassword);
 
         if (valid) {
-            const updated = await updatePassword(username, newPassword);
-            if (updated) {
-                alert("Password updated successfully!");
-                window.location.href = "LoginPage.html";
+            const deleted = await deleteUser(username);
+            if (deleted) {
+                const added = await addNewUser(username, newPassword);
+                if (added) {
+                    alert("Password updated successfully!");
+                    window.location.href = "LoginPage.html";
+                } else {
+                    alert("Failed to add new user.");
+                }
             } else {
-                alert("Failed to update password.");
+                alert("Failed to delete old user.");
             }
         } else {
             alert("Invalid old password or user not found.");
@@ -26,10 +31,12 @@ async function verifyOldPassword(username, oldPassword) {
     try {
         const response = await fetch('http://localhost:3000/routes/Login');
         const users = await response.json();
-        const values = Object.values(users);
+        const allUsers = Object.values(users).flat(); // Flatten nested arrays
 
-        for (const user of values) {
-            if (user.email === username && user.password === oldPassword) {
+        console.log(allUsers); // Optional: to verify structure
+
+        for (const user of allUsers) {
+            if (user.username === username && user.password === oldPassword) {
                 return true;
             }
         }
@@ -40,54 +47,69 @@ async function verifyOldPassword(username, oldPassword) {
     }
 }
 
-async function updatePassword(username, newPassword) {
+async function deleteUser(username) {
     try {
-        // Step 1: Fetch all users
+        // Fetch all users to find the UID of the target user
         const response = await fetch('http://localhost:3000/routes/Login');
-        const users = await response.json();
-
-        // Step 2: Find the key and UID for the user by username (email)
-        let targetKey = null;
-        let uid = null;
-
-        for (const [key, user] of Object.entries(users)) {
-            if (user.email === username) {
-                targetKey = key;
-                uid = user.uid;
-                break;
-            }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch users: ${response.status}`);
         }
 
-        if (!targetKey || !uid) {
+        const rawUsers = await response.json();
+        const users = Object.values(rawUsers).flat();
+
+        const targetUser = users.find(user => user.username === username);
+        if (!targetUser) {
             console.error("User not found");
             return false;
         }
 
-        // Step 3: DELETE user entry by username (email)
-        const deleteResponse = await fetch(`http://localhost:3000/routes/Login?email=${encodeURIComponent(username)}`, {
-            method: "DELETE",
+        const uid = targetUser.uid;
+
+        // Send a DELETE request to remove the user by UID
+        const deleteResponse = await fetch(`http://localhost:3000/routes/Login?uid=${uid}`, {
+            method: 'DELETE', // Send a DELETE request
         });
-        
-        
 
         if (!deleteResponse.ok) {
-            console.error("Failed to delete user entry");
-            return false;
+            const errorText = await deleteResponse.text();
+            throw new Error(`Failed to delete user: ${errorText}`);
         }
 
-        // Step 4: POST new entry with same UID and updated password
-        const updateResponse = await fetch("http://localhost:3000/routes/Login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: username, password: newPassword, uid: uid })
-        });
-
-        return updateResponse.ok;
+        console.log('User deleted successfully');
+        return true;
     } catch (error) {
-        console.error("Error updating password:", error);
+        console.error("Error deleting user:", error);
         return false;
     }
 }
 
+async function addNewUser(username, newPassword) {
+    try {
+        // Prepare the data for the new user
+        const newUser = {
+            username: username,
+            password: newPassword,
+        };
 
+        // Send a POST request to add a new user
+        const addResponse = await fetch('http://localhost:3000/routes/Login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUser),
+        });
 
+        if (!addResponse.ok) {
+            const errorText = await addResponse.text();
+            throw new Error(`Failed to add new user: ${errorText}`);
+        }
+
+        console.log('New user added successfully');
+        return true;
+    } catch (error) {
+        console.error("Error adding new user:", error);
+        return false;
+    }
+}
